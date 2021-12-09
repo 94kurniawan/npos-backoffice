@@ -1,4 +1,4 @@
-# cashier-fe-n-pos
+# fe-n-pos-back-office
 
 ## Project setup
 ```
