@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 // import Home from '../views/Home.vue'
-import SalesHistory from '../views/SalesHistory.vue'
+import SalesSummary from '../views/reports/SalesSummary.vue'
 
 const routes = [
   {
@@ -15,9 +15,9 @@ const routes = [
   //   component: Home
   // },
   {
-    path: '/sales-history',
-    name: 'SalesHistory',
-    component: SalesHistory
+    path: '/sales-summary',
+    name: 'SalesSummary',
+    component: SalesSummary
   },
   // {
   //   path: '/about',

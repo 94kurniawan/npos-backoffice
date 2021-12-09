@@ -114,7 +114,7 @@
         </svg>
       </div>
       <div v-if="showAllReports === true">
-        <router-link to="/sales-history" class="py-4 pl-4 flex items-center">
+        <router-link to="/sales-summary" class="py-4 pl-4 flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-6 w-6"

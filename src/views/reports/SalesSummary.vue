@@ -1,21 +1,9 @@
 <template>
-  <div id="container" class="h-full relative bg-gray-200">
-    <div class="relative h-full w-full p-3 grid grid-cols-12 overflow-y-auto">
-      <div class="bg-white h-full col-span-5 overflow-y-auto pb-3">
+  <div id="container" class="h-full relative bg-white">
+    <div class="relative h-full w-full p-3 overflow-y-auto">
+      <p class="text-center uppercase p-3">Sales report - summary</p>
+      <div class="bg-white col-span-5 overflow-y-auto pb-3">
         <div class="sticky top-0">
-          <input
-            type="text"
-            class="
-              p-3
-              w-full
-              bg-white
-              border-b-2
-              text-center
-              outline-none
-              focus:bg-gray-100
-            "
-            placeholder="cari nomor kwitansi/receipt..."
-          />
           <div class="grid grid-cols-2">
             <input
               @change="fetchSales()"
@@ -93,150 +81,6 @@
               <p class="truncate">{{ currency(history.total) }}</p>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="h-full col-span-7 flex overflow-y-auto overflow-x-auto">
-        <div
-          :class="{ hidden: hideReceipt }"
-          class="relative font-mono mx-auto top-10"
-        >
-          <div class="absolute -top-3 -left-2 text-gray-500">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-8 w-8"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
-              />
-            </svg>
-          </div>
-          <div class="bg-white px-3 py-3 h-auto shadow-xl">
-            <p class="text-center font-bold">{{ user.info.store_name }}</p>
-            <p class="text-center">{{ user.info.store_address }}</p>
-            <p class="text-center">
-              ================================================
-            </p>
-
-            <div class="grid grid-cols-2">
-              <p>Tanggal</p>
-              <p class="text-right">
-                {{ formatDateInIDN(receipt.order_date) }}
-              </p>
-            </div>
-            <div class="grid grid-cols-2">
-              <p>Nomor</p>
-              <p class="text-right">{{ receipt.payment.number }}</p>
-            </div>
-            <div class="grid grid-cols-2">
-              <p>Kasir</p>
-              <p class="text-right">{{ sales.cashier.name }}</p>
-            </div>
-            <div v-if="receipt.customer_name != null" class="grid grid-cols-2">
-              <p>Customer</p>
-              <p class="text-right">{{ receipt.customer_name }}</p>
-            </div>
-            <div v-if="receipt.table_number != null" class="grid grid-cols-2">
-              <p>Table</p>
-              <p class="text-right">{{ receipt.table_number }}</p>
-            </div>
-            <p class="text-center">
-              ================================================
-            </p>
-            <div v-for="item in receipt.items" :key="item.key">
-              <div class="grid grid-flow-col grid-cols-6">
-                <div class="col-span-3 font-bold">
-                  <p class="truncate ...">{{ item.name }}</p>
-                </div>
-                <p class="text-right">x{{ item.quantity }}</p>
-                <p class="col-span-2 text-right">{{ currency(item.total) }}</p>
-              </div>
-              <p>{{ item.variant }}</p>
-              <div class="grid grid-flow-col grid-cols-6">
-                <p class="col-span-4">{{ item.option }}</p>
-                <p v-if="item.option_price != 0" class="col-span-2 text-right">
-                  {{ item.option_price }}
-                </p>
-              </div>
-              <div
-                v-if="item.total_discount != 0"
-                class="grid grid-flow-col grid-cols-6"
-              >
-                <p class="col-span-4">{{ item.discount_name }}</p>
-                <p class="col-span-2 text-right">
-                  ({{ currency(item.total_discount) }})
-                </p>
-              </div>
-              <div class="grid grid-flow-col grid-cols-6">
-                <p class="col-span-4">{{ item.sales_type }}</p>
-              </div>
-              <div
-                v-for="cost in item.additional_costs"
-                :key="cost.key"
-                class="grid grid-flow-col grid-cols-6"
-              >
-                <p class="col-span-4">+ {{ cost.name }}</p>
-                <p class="col-span-2 text-right">{{ currency(cost.total) }}</p>
-              </div>
-            </div>
-            <p class="text-center">
-              ================================================
-            </p>
-            <div class="grid grid-flow-col grid-cols-6 font-bold">
-              <p class="col-span-4">SUB TOTAL</p>
-              <p class="col-span-2 text-right">
-                {{ currency(receipt.total_price) }}
-              </p>
-            </div>
-            <div
-              v-if="receipt.total_option != 0"
-              class="grid grid-flow-col grid-cols-6 font-bold"
-            >
-              <p class="col-span-4">SUB TOTAL TAMBAHAN</p>
-              <p class="col-span-2 text-right">
-                {{ currency(receipt.total_option) }}
-              </p>
-            </div>
-            <div class="grid grid-flow-col grid-cols-6 font-bold">
-              <p class="col-span-4">SUB TOTAL Disc</p>
-              <p class="col-span-2 text-right">
-                ({{ currency(receipt.total_discount) }})
-              </p>
-            </div>
-            <div
-              v-for="cost in receipt.additional_cost"
-              :key="cost.key"
-              class="grid grid-flow-col grid-cols-6 font-bold"
-            >
-              <p class="col-span-4">+ {{ cost.name }}</p>
-              <p class="col-span-2 text-right">{{ currency(cost.total) }}</p>
-            </div>
-            <p class="text-center">
-              ================================================
-            </p>
-            <div class="grid grid-flow-col grid-cols-6 font-bold">
-              <p class="col-span-4">TOTAL</p>
-              <p class="col-span-2 text-right">{{ currency(receipt.total) }}</p>
-            </div>
-            <div class="grid grid-flow-col grid-cols-6 font-bold">
-              <p class="col-span-4 uppercase">{{ receipt.payment.type }}</p>
-              <p class="col-span-2 text-right">
-                {{ currency(receipt.payment.received) }}
-              </p>
-            </div>
-            <div class="grid grid-flow-col grid-cols-6 font-bold">
-              <p class="col-span-4">CHANGE</p>
-              <p class="col-span-2 text-right">
-                {{ currency(receipt.change) }}
-              </p>
-            </div>
-          </div>
-          <br /><br /><br /><br />
         </div>
       </div>
 
@@ -356,7 +200,7 @@ import axios from "axios";
 let apiHost = process.env.VUE_APP_BACKEND_HOST;
 
 export default {
-  name: "SalesHistory",
+  name: "SalesSummary",
   components: {
     SideMenu,
     ModalDelete,
