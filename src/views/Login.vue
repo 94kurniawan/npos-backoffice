@@ -99,8 +99,8 @@
 </template>
 
 <script>
-// import axios from "axios";
-// let apiHost = process.env.VUE_APP_BACKEND_HOST;
+import axios from "axios";
+let apiHost = process.env.VUE_APP_BACKEND_HOST;
 
 export default {
   name: "Login",
@@ -115,18 +115,16 @@ export default {
 
   methods: {
     async login() {
-      // const response = await axios.post(apiHost + "/api/login", this.data);
-      // localStorage.setItem("token", response.data.data.token);
-      // localStorage.setItem("user", JSON.stringify(response.data.data));
-      // this.$router.push("/sales-history");
-      this.$router.push("/sales-history");
+      const response = await axios.post(apiHost + "/api/login", this.data);
+      localStorage.setItem("user", JSON.stringify(response.data.data));
+      this.$router.push("/sales-summary");
     },
 
-    checkToken() {
-      if (localStorage.getItem("token")) {
-        this.$router.push("/home");
-      }
-    },
+    // checkToken() {
+    //   if (localStorage.getItem("token")) {
+    //     this.$router.push("/home");
+    //   }
+    // },
   },
 
   mounted() {
