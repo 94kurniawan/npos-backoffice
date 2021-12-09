@@ -1,27 +1,5 @@
 <template>
   <div id="listMenu" class="h-full bg-gray-100">
-    <!-- user info -->
-    <!-- <div class="h-1/6 bg-gray-100 text-gray-600 border-b-2">
-      <div class="flex justify-end px-3 pt-4 pb-2">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-12 w-12"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-      </div>
-      <p class="text-right px-3 capitalize underline">
-        {{ userInfo.info.name }}
-      </p>
-    </div> -->
     <!-- store name -->
     <div
       class="
@@ -87,12 +65,12 @@
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
-            d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+            d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"
           />
         </svg>
-        <p class="ml-1">Point of Sale</p>
+        <p class="ml-1">Dashboard</p>
       </router-link>
-      <router-link to="/sales-history" class="py-4 flex items-center">
+      <div @click="showReports()" class="py-4 flex items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-6 w-6"
@@ -104,10 +82,89 @@
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
-            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
           />
         </svg>
-        <p class="ml-1">Riwayat Penjualan</p>
+        <p class="ml-1 flex-grow">Reports</p>
+        <svg
+          v-if="showAllReports === false"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        <svg
+          v-if="showAllReports === true"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </div>
+      <div v-if="showAllReports === true">
+        <router-link to="/sales-history" class="py-4 pl-4 flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
+          </svg>
+          <p class="ml-1">Sales - Summary</p>
+        </router-link>
+        <router-link to="/home" class="py-4 pl-4 flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+            />
+          </svg>
+          <p class="ml-1">Recap Cashier</p>
+        </router-link>
+      </div>
+      <router-link to="/home" class="py-4 flex items-center">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+          />
+        </svg>
+        <p class="ml-1">Point of Sale</p>
       </router-link>
     </div>
 
@@ -174,6 +231,7 @@ export default {
           store_name: "",
         },
       },
+      showAllReports: true,
     };
   },
 
@@ -182,6 +240,14 @@ export default {
   },
 
   methods: {
+    showReports() {
+      if (this.showAllReports === false) {
+        this.showAllReports = true;
+      } else {
+        this.showAllReports = false;
+      }
+    },
+
     async logOut() {
       try {
         localStorage.removeItem("token");
