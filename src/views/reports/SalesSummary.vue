@@ -460,7 +460,7 @@ export default {
             params: {
               date_from: this.datePeriod.from,
               date_to: this.datePeriod.to,
-              store_id: this.user.info.stores[0].id,
+              store_id: localStorage.getItem("selectedStore"),
             },
           }
         );

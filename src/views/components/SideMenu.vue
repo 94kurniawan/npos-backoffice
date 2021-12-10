@@ -32,9 +32,21 @@
       </div>
       <div class="col-span-2 uppercase text-sm">
         <p class="text-xs mb-2 underline">{{ userInfo.info.name }}</p>
-        <p class="font-bold">
-          {{ userInfo.info.store_name }}
-        </p>
+        <div class="font-bold">
+          <select
+            @change="selectStore()"
+            v-model="selectedStore"
+            class="w-full border-2 p-2 rounded-lg bg-gray-200"
+          >
+            <option
+              v-for="store in userInfo.info.stores"
+              :key="store.key"
+              :value="store.id"
+            >
+              {{ store.name }}
+            </option>
+          </select>
+        </div>
       </div>
     </div>
     <!-- list Menu -->
@@ -244,11 +256,14 @@ export default {
         },
       },
       showAllReports: true,
+
+      selectedStore: null,
     };
   },
 
   created() {
     this.userInfo = JSON.parse(localStorage.getItem("user"));
+    this.selectedStore = localStorage.getItem("selectedStore");
   },
 
   methods: {
@@ -258,6 +273,11 @@ export default {
       } else {
         this.showAllReports = false;
       }
+    },
+
+    selectStore() {
+      localStorage.setItem("selectedStore", this.selectedStore);
+      this.$router.go();
     },
 
     async logOut() {

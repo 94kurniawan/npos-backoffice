@@ -117,6 +117,10 @@ export default {
     async login() {
       const response = await axios.post(apiHost + "/api/login", this.data);
       localStorage.setItem("user", JSON.stringify(response.data.data));
+      localStorage.setItem(
+        "selectedStore",
+        response.data.data.info.stores[0].id
+      );
       this.$router.push("/sales-summary");
     },
 
