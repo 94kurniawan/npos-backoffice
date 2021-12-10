@@ -157,41 +157,6 @@
                   {{ separator(item.total_collected) }}
                 </td>
               </tr>
-              <tr
-                v-for="item in report.items"
-                :key="item.key"
-                @click="showReceipt(history)"
-                class="
-                  border-b border-gray-200
-                  hover:bg-gray-100
-                  odd:bg-gray-50
-                  align-top
-                "
-              >
-                <td class="py-3 px-4 text-left">
-                  {{ item.store_item_name }}
-                  <p class="sm:hidden text-gray-500">{{ item.variant }}</p>
-                </td>
-                <td class="py-3 px-4 text-left mobile:hidden">
-                  {{ item.variant }}
-                </td>
-                <td class="py-3 px-4 text-right">{{ separator(item.sold) }}</td>
-                <td class="py-3 px-4 text-right mobile:hidden">
-                  {{ separator(item.gross_sales) }}
-                </td>
-                <td class="py-3 px-4 text-right mobile:hidden">
-                  {{ separator(item.total_discount) }}
-                </td>
-                <td class="py-3 px-4 text-right mobile:hidden">
-                  {{ separator(item.net_sale) }}
-                </td>
-                <td class="py-3 px-4 text-right mobile:hidden">
-                  {{ separator(item.additional_cost) }}
-                </td>
-                <td class="py-3 px-4 text-right">
-                  {{ separator(item.total_collected) }}
-                </td>
-              </tr>
             </tbody>
           </table>
 
@@ -333,95 +298,10 @@ export default {
 
   data() {
     return {
-      token: localStorage.getItem("token"),
       user: JSON.parse(localStorage.getItem("user")),
       datePeriod: {
         from: moment().format("YYYY-MM-DD"),
         to: moment().format("YYYY-MM-DD"),
-      },
-
-      sales: {
-        cashier: {
-          id: null,
-          name: "",
-          store_name: "a",
-          store_address: "",
-        },
-        orders: [
-          {
-            id: 1,
-            order_number: "1638785651",
-            customer_name: null,
-            table_number: null,
-            order_date: "2021-12-06",
-            items: [
-              {
-                id: 4,
-                name: "Teh Botol",
-                sku: "TH-1",
-                variant: null,
-                sales_type: "Dine in",
-                quantity: 2,
-                price: 5000,
-                option: null,
-                option_price: null,
-                discount_name: null,
-                discount_percentage: null,
-                additional_costs: [
-                  {
-                    name: "PPN 5%",
-                    percentage: 0.05,
-                  },
-                ],
-              },
-              {
-                id: 3,
-                name: "Air Mineral",
-                sku: "MNRL-1",
-                variant: null,
-                sales_type: "Dine in",
-                quantity: 1,
-                price: 3000,
-                option: null,
-                option_price: null,
-                discount_name: null,
-                discount_percentage: null,
-                additional_costs: [
-                  {
-                    name: "PPN 5%",
-                    percentage: 0.05,
-                  },
-                ],
-              },
-              {
-                id: 2,
-                name: "Paket betina",
-                sku: "PKTBTN-D",
-                variant: "Dada",
-                sales_type: "Dine in",
-                quantity: 3,
-                price: 20000,
-                option: "Nasi TO",
-                option_price: 0,
-                discount_name: "50%",
-                discount_percentage: 0.5,
-                additional_costs: [
-                  {
-                    name: "PPN 5%",
-                    percentage: 0.05,
-                  },
-                ],
-              },
-            ],
-            payment: {
-              id: 1,
-              number: "PYMT-1638785651",
-              date: "2021-12-06",
-              type: "Cash",
-              received: 100000,
-            },
-          },
-        ],
       },
 
       report: {
@@ -570,69 +450,21 @@ export default {
         this.showSideMenu = false;
       }
     },
-    resetReceipt() {
-      this.receipt = {
-        id: null,
-        order_number: "",
-        customer_name: null,
-        table_number: null,
-        order_date: "",
-        items: [{}],
-        payment: {},
-        total_price: null,
-        total_option: null,
-        total_discount: null,
-        additional_cost: [{ name: "", total: null }],
-        total_additional_cost: null,
-        total: null,
-        change: null,
-        store: {
-          name: "",
-          address: "",
-          cashier_name: "",
-        },
-      };
-    },
-    showReceipt(receipt) {
-      this.receipt = receipt;
-      this.hideReceipt = false;
-    },
-    closeReceipt() {
-      this.resetReceipt();
-      this.hideReceipt = true;
-    },
-    async fetchSales() {
+    async fetchReport() {
       try {
-        let headers = { Authorization: `Bearer ${this.token}` };
-        const response = await axios.get(apiHost + "/api/store/order", {
-          headers,
-          params: {
-            date_from: this.datePeriod.from,
-            date_to: this.datePeriod.to,
-          },
-        });
-        this.sales = response.data.data;
-        this.closeReceipt();
-      } catch (error) {
-        console.log(error.response);
-      }
-    },
-    confirmDelete() {
-      let modal = document.getElementById("modal-delete");
-      modal.style.display = "block";
-    },
-    async deleteSale() {
-      try {
-        let headers = { Authorization: `Bearer ${this.token}` };
-        const response = await axios.delete(
-          apiHost + "/api/store/order/" + this.receipt.id,
+        let headers = { Authorization: `Bearer ${this.user.token}` };
+        const response = await axios.get(
+          apiHost + "/api/store/fetch-sales-reports",
           {
             headers,
+            params: {
+              date_from: this.datePeriod.from,
+              date_to: this.datePeriod.to,
+              store_id: this.user.info.stores[0].id,
+            },
           }
         );
-        console.log(response);
-        this.fetchSales();
-        alert(response.data.message);
+        this.report = response.data.data;
       } catch (error) {
         console.log(error.response);
       }
@@ -640,7 +472,7 @@ export default {
   },
 
   created() {
-    this.fetchSales();
+    this.fetchReport();
   },
 };
 </script>
