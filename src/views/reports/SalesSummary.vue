@@ -3,13 +3,15 @@
     <div class="relative h-full w-full p-3">
       <div class="bg-white h-full overflow-y-auto pb-3">
         <div class="sticky top-0">
-          <p class="text-center uppercase p-3">Sales report - summary</p>
+          <p class="text-center uppercase p-3 md:mb-3 font-bold">
+            Sales report - summary
+          </p>
           <div
             class="
               grid
               items-center
               content-center
-              justify-items-end
+              justify-items-center
               grid-cols-2
               md:grid-cols-8
               gap-1
@@ -47,71 +49,64 @@
           </div>
         </div>
         <div class="py-3">
-          <div class="bg-yellow-100 rounded-lg p-4 grid grid-cols-2 gap-1">
-            <!-- gross sales -->
-            <div class="">
-              <p class="uppercase font-bold">Gross Sales</p>
-            </div>
-            <div class="">
-              <p class="text-right">
-                {{ currency(report.total_gross_sales) }}
-              </p>
-            </div>
-            <!-- discount -->
-            <div class="col-span-2">
+          <div class="flex justify-end md:hidden">
+            <div class="w-full md:w-1/2 bg-blue-50 rounded-lg p-4">
+              <!-- gross sales -->
+              <div class="flex justify-between pb-2">
+                <p class="uppercase font-bold">Gross Sales</p>
+                <p class="text-right">
+                  {{ currency(report.total_gross_sales) }}
+                </p>
+              </div>
+              <!-- discount -->
               <p class="uppercase">discount :</p>
-            </div>
-            <div
-              v-for="disc in report.discounts"
-              :key="disc.key"
-              class="col-span-2 flex justify-between"
-            >
-              <div class="">
-                <p class="uppercase">-- {{ disc.discount_name }}</p>
+              <div
+                v-for="disc in report.discounts"
+                :key="disc.key"
+                class="col-span-2 flex justify-between"
+              >
+                <div class="">
+                  <p class="uppercase">-- {{ disc.discount_name }}</p>
+                </div>
+                <div class="">
+                  <p class="text-right text-gray-500">
+                    ({{ currency(disc.amount) }})
+                  </p>
+                </div>
               </div>
-              <div class="">
-                <p class="text-right text-gray-500">
-                  ({{ currency(disc.amount) }})
+              <!-- net sales -->
+              <div class="flex justify-between py-2">
+                <p class="uppercase font-bold">net Sales</p>
+                <p class="text-right">
+                  {{ currency(report.net_sales) }}
                 </p>
               </div>
-            </div>
-            <!-- net sales -->
-            <div class="">
-              <p class="uppercase font-bold">net Sales</p>
-            </div>
-            <div class="">
-              <p class="text-right">
-                {{ currency(report.net_sales) }}
-              </p>
-            </div>
-            <!-- additional costs -->
-            <div class="col-span-2">
+              <!-- additional costs -->
               <p class="uppercase">add costs :</p>
-            </div>
-            <div
-              v-for="addCost in report.additional_costs"
-              :key="addCost.key"
-              class="col-span-2 flex justify-between"
-            >
-              <div class="">
-                <p class="uppercase">-- {{ addCost.add_cost_name }}</p>
+              <div
+                v-for="addCost in report.additional_costs"
+                :key="addCost.key"
+                class="col-span-2 flex justify-between"
+              >
+                <div class="">
+                  <p class="uppercase">-- {{ addCost.add_cost_name }}</p>
+                </div>
+                <div class="">
+                  <p class="text-right text-gray-500">
+                    {{ currency(addCost.amount) }}
+                  </p>
+                </div>
               </div>
-              <div class="">
-                <p class="text-right text-gray-500">
-                  {{ currency(addCost.amount) }}
+              <!-- total collected -->
+              <div class="flex justify-between mt-2 py-3 border-t-2 border-b-2">
+                <p class="uppercase font-bold">total collected</p>
+                <p class="text-right font-bold">
+                  {{ currency(report.total_collect) }}
                 </p>
               </div>
-            </div>
-            <!-- total collected -->
-            <div class="">
-              <p class="uppercase font-bold">total collected</p>
-            </div>
-            <div class="">
-              <p class="text-right">
-                {{ currency(report.total_collect) }}
-              </p>
             </div>
           </div>
+
           <p class="px-4 pt-4">Sales Details :</p>
           <table class="w-full">
             <thead class="sticky top-10 text-sm">
@@ -199,52 +194,66 @@
               </tr>
             </tbody>
           </table>
+
+          <div class="flex justify-end mt-3 mobile:hidden">
+            <div class="w-full md:w-1/2 bg-blue-50 rounded-lg p-4">
+              <!-- gross sales -->
+              <div class="flex justify-between pb-2">
+                <p class="uppercase font-bold">Gross Sales</p>
+                <p class="text-right">
+                  {{ currency(report.total_gross_sales) }}
+                </p>
+              </div>
+              <!-- discount -->
+              <p class="uppercase">discount :</p>
+              <div
+                v-for="disc in report.discounts"
+                :key="disc.key"
+                class="col-span-2 flex justify-between"
+              >
+                <div class="">
+                  <p class="uppercase">-- {{ disc.discount_name }}</p>
+                </div>
+                <div class="">
+                  <p class="text-right text-gray-500">
+                    ({{ currency(disc.amount) }})
+                  </p>
+                </div>
+              </div>
+              <!-- net sales -->
+              <div class="flex justify-between py-2">
+                <p class="uppercase font-bold">net Sales</p>
+                <p class="text-right">
+                  {{ currency(report.net_sales) }}
+                </p>
+              </div>
+              <!-- additional costs -->
+              <p class="uppercase">add costs :</p>
+              <div
+                v-for="addCost in report.additional_costs"
+                :key="addCost.key"
+                class="col-span-2 flex justify-between"
+              >
+                <div class="">
+                  <p class="uppercase">-- {{ addCost.add_cost_name }}</p>
+                </div>
+                <div class="">
+                  <p class="text-right text-gray-500">
+                    {{ currency(addCost.amount) }}
+                  </p>
+                </div>
+              </div>
+              <!-- total collected -->
+              <div class="flex justify-between mt-2 py-3 border-t-2 border-b-2">
+                <p class="uppercase font-bold">total collected</p>
+                <p class="text-right font-bold">
+                  {{ currency(report.total_collect) }}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
-      <!-- Print & refund Button -->
-      <!-- <div
-        :class="{ hidden: hideReceipt }"
-        class="absolute w-full flex gap-4 justify-end bottom-3 right-8"
-      >
-        <button
-          class="
-            py-4
-            w-52
-            bg-blue-400
-            text-white
-            flex
-            justify-center
-            items-center
-            content-center
-          "
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
-            />
-          </svg>
-          <p class="ml-1 text-xl">Print Receipt</p>
-        </button>
-        <button
-          @click="confirmDelete()"
-          class="py-4 w-40 bg-red-400 text-white"
-        >
-          Refund
-        </button>
-      </div> -->
-
-      <!-- modal confirm Delete -->
-      <modal-delete @yes="deleteSale" />
     </div>
 
     <!-- side menu -->
@@ -313,7 +322,6 @@ import moment from "moment";
 import "moment/locale/id";
 import * as numberFormat from "@/custom_package/number.js";
 import SideMenu from "@/views/components/SideMenu.vue";
-import ModalDelete from "@/views/components/ModalDelete.vue";
 import axios from "axios";
 let apiHost = process.env.VUE_APP_BACKEND_HOST;
 
@@ -321,7 +329,6 @@ export default {
   name: "SalesSummary",
   components: {
     SideMenu,
-    ModalDelete,
   },
 
   data() {
