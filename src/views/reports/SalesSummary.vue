@@ -1,30 +1,135 @@
 <template>
   <div id="container" class="h-full relative bg-white">
-    <div class="relative h-full w-full p-3 overflow-y-auto">
-      <p class="text-center uppercase p-3">Sales report - summary</p>
-      <div class="bg-white col-span-5 overflow-y-auto pb-3">
+    <div class="relative h-full w-full p-3">
+      <div class="bg-white h-full overflow-y-auto pb-3">
         <div class="sticky top-0">
-          <div class="grid grid-cols-2">
+          <p class="text-center uppercase p-3">Sales report - summary</p>
+          <div
+            class="
+              grid
+              items-center
+              content-center
+              justify-items-end
+              grid-cols-2
+              md:grid-cols-8
+              gap-1
+            "
+          >
+            <label class="mobile:hidden col-start-4 px-2">Period</label>
             <input
               @change="fetchSales()"
               v-model="datePeriod.from"
               type="date"
-              class="w-full bg-white p-3 border-b-2 border-r-2 outline-none"
+              class="
+                md:col-span-2
+                w-full
+                bg-white
+                p-3
+                border-2
+                outline-none
+                rounded-lg
+              "
             />
             <input
               @change="fetchSales()"
               v-model="datePeriod.to"
               type="date"
-              class="w-full bg-white p-3 border-b-2 outline-none"
+              class="
+                md:col-span-2
+                w-full
+                bg-white
+                p-3
+                border-2
+                outline-none
+                rounded-lg
+              "
             />
           </div>
         </div>
         <div class="py-3">
-          <!-- <table class="h-full w-full">
+          <div class="bg-yellow-100 rounded-lg p-4 grid grid-cols-2 gap-1">
+            <!-- gross sales -->
+            <div class="">
+              <p class="uppercase font-bold">Gross Sales</p>
+            </div>
+            <div class="">
+              <p class="text-right">
+                {{ currency(report.total_gross_sales) }}
+              </p>
+            </div>
+            <!-- discount -->
+            <div class="col-span-2">
+              <p class="uppercase">discount :</p>
+            </div>
+            <div
+              v-for="disc in report.discounts"
+              :key="disc.key"
+              class="col-span-2 flex justify-between"
+            >
+              <div class="">
+                <p class="uppercase">-- {{ disc.discount_name }}</p>
+              </div>
+              <div class="">
+                <p class="text-right text-gray-500">
+                  ({{ currency(disc.amount) }})
+                </p>
+              </div>
+            </div>
+            <!-- net sales -->
+            <div class="">
+              <p class="uppercase font-bold">net Sales</p>
+            </div>
+            <div class="">
+              <p class="text-right">
+                {{ currency(report.net_sales) }}
+              </p>
+            </div>
+            <!-- additional costs -->
+            <div class="col-span-2">
+              <p class="uppercase">add costs :</p>
+            </div>
+            <div
+              v-for="addCost in report.additional_costs"
+              :key="addCost.key"
+              class="col-span-2 flex justify-between"
+            >
+              <div class="">
+                <p class="uppercase">-- {{ addCost.add_cost_name }}</p>
+              </div>
+              <div class="">
+                <p class="text-right text-gray-500">
+                  {{ currency(addCost.amount) }}
+                </p>
+              </div>
+            </div>
+            <!-- total collected -->
+            <div class="">
+              <p class="uppercase font-bold">total collected</p>
+            </div>
+            <div class="">
+              <p class="text-right">
+                {{ currency(report.total_collect) }}
+              </p>
+            </div>
+          </div>
+          <p class="px-4 pt-4">Sales Details :</p>
+          <table class="w-full">
+            <thead class="sticky top-10 text-sm">
+              <tr class="uppercase">
+                <th class="py-3 px-4 text-left">item</th>
+                <th class="py-3 px-4 text-left mobile:hidden">variant</th>
+                <th class="py-3 px-4 text-right">sold</th>
+                <th class="py-3 px-4 text-right mobile:hidden">gross sales</th>
+                <th class="py-3 px-4 text-right mobile:hidden">discount</th>
+                <th class="py-3 px-4 text-right mobile:hidden">net sale</th>
+                <th class="py-3 px-4 text-right mobile:hidden">add cost</th>
+                <th class="py-3 px-4 text-right">collected</th>
+              </tr>
+            </thead>
             <tbody class="text-gray-800 text-sm font-light">
               <tr
-                v-for="history in salesHistory"
-                :key="history.key"
+                v-for="item in report.items"
+                :key="item.key"
                 @click="showReceipt(history)"
                 class="
                   border-b border-gray-200
@@ -34,58 +139,71 @@
                 "
               >
                 <td class="py-3 px-4 text-left">
-                  <p class="font-bold">
-                    {{ history.payment.number }}
-                  </p>
-                  <p class="">
-                    {{ formatDateInIDN(history.order_date) }}
-                  </p>
+                  {{ item.store_item_name }}
+                  <p class="sm:hidden text-gray-500">{{ item.variant }}</p>
                 </td>
-                <td class="py-3 px-4 text-left whitespace-nowrap">
-                  <p>{{ history.customer_name }}</p>
-                  <p>Table: {{ history.table_number }}</p>
+                <td class="py-3 px-4 text-left mobile:hidden">
+                  {{ item.variant }}
                 </td>
-                <td class="py-3 px-4 text-right whitespace-nowrap">
-                  {{ currency(history.total) }}
+                <td class="py-3 px-4 text-right">{{ separator(item.sold) }}</td>
+                <td class="py-3 px-4 text-right mobile:hidden">
+                  {{ separator(item.gross_sales) }}
+                </td>
+                <td class="py-3 px-4 text-right mobile:hidden">
+                  {{ separator(item.total_discount) }}
+                </td>
+                <td class="py-3 px-4 text-right mobile:hidden">
+                  {{ separator(item.net_sale) }}
+                </td>
+                <td class="py-3 px-4 text-right mobile:hidden">
+                  {{ separator(item.additional_cost) }}
+                </td>
+                <td class="py-3 px-4 text-right">
+                  {{ separator(item.total_collected) }}
+                </td>
+              </tr>
+              <tr
+                v-for="item in report.items"
+                :key="item.key"
+                @click="showReceipt(history)"
+                class="
+                  border-b border-gray-200
+                  hover:bg-gray-100
+                  odd:bg-gray-50
+                  align-top
+                "
+              >
+                <td class="py-3 px-4 text-left">
+                  {{ item.store_item_name }}
+                  <p class="sm:hidden text-gray-500">{{ item.variant }}</p>
+                </td>
+                <td class="py-3 px-4 text-left mobile:hidden">
+                  {{ item.variant }}
+                </td>
+                <td class="py-3 px-4 text-right">{{ separator(item.sold) }}</td>
+                <td class="py-3 px-4 text-right mobile:hidden">
+                  {{ separator(item.gross_sales) }}
+                </td>
+                <td class="py-3 px-4 text-right mobile:hidden">
+                  {{ separator(item.total_discount) }}
+                </td>
+                <td class="py-3 px-4 text-right mobile:hidden">
+                  {{ separator(item.net_sale) }}
+                </td>
+                <td class="py-3 px-4 text-right mobile:hidden">
+                  {{ separator(item.additional_cost) }}
+                </td>
+                <td class="py-3 px-4 text-right">
+                  {{ separator(item.total_collected) }}
                 </td>
               </tr>
             </tbody>
-          </table> -->
-          <div
-            v-for="history in salesHistory"
-            :key="history.key"
-            @click="showReceipt(history)"
-            class="
-              px-4
-              py-1
-              grid grid-cols-11
-              gap-1
-              border-b
-              odd:bg-gray-50
-              active:bg-gray-100
-            "
-          >
-            <div class="col-span-3 text-sm">
-              <p class="truncate">{{ history.payment.number }}</p>
-              <p class="text-sm text-gray-400">
-                {{ formatDateInIDN(history.order_date) }}
-              </p>
-            </div>
-            <div class="col-span-4">
-              <p class="truncate">{{ history.customer_name }}</p>
-              <p v-if="history.table_number" class="text-sm text-gray-400">
-                {{ "TABLE :" + history.table_number }}
-              </p>
-            </div>
-            <div class="col-span-4 text-right">
-              <p class="truncate">{{ currency(history.total) }}</p>
-            </div>
-          </div>
+          </table>
         </div>
       </div>
 
       <!-- Print & refund Button -->
-      <div
+      <!-- <div
         :class="{ hidden: hideReceipt }"
         class="absolute w-full flex gap-4 justify-end bottom-3 right-8"
       >
@@ -123,7 +241,7 @@
         >
           Refund
         </button>
-      </div>
+      </div> -->
 
       <!-- modal confirm Delete -->
       <modal-delete @yes="deleteSale" />
@@ -178,7 +296,7 @@
             h-full
             col-span-8
             sm:col-span-4
-            md:col-span-3
+            lg:col-span-3
             bg-gray-200
             overflow-y-auto
           "
@@ -299,88 +417,48 @@ export default {
         ],
       },
 
-      hideReceipt: true,
-      receipt: {
-        id: null,
-        order_number: "",
-        customer_name: null,
-        table_number: null,
-        order_date: "",
-        items: [
-          // {
-          //   id: 4,
-          //   name: "Teh Botol",
-          //   sku: "TH-1",
-          //   variant: null,
-          //   sales_type: "Dine in",
-          //   quantity: 2,
-          //   price: 5000,
-          //   option: null,
-          //   option_price: 0,
-          //   discount_name: null,
-          //   discount_percentage: 0,
-          //   additional_costs: [
-          //     { name: "PPN 5%", percentage: 0.05, total: 500 },
-          //   ],
-          //   total: 10000,
-          //   total_discount: 0,
-          // },
-          // {
-          //   id: 3,
-          //   name: "Air Mineral",
-          //   sku: "MNRL-1",
-          //   variant: null,
-          //   sales_type: "Dine in",
-          //   quantity: 1,
-          //   price: 3000,
-          //   option: null,
-          //   option_price: 0,
-          //   discount_name: null,
-          //   discount_percentage: 0,
-          //   additional_costs: [
-          //     { name: "PPN 5%", percentage: 0.05, total: 150 },
-          //   ],
-          //   total: 3000,
-          //   total_discount: 0,
-          // },
-          // {
-          //   id: 2,
-          //   name: "Paket betina",
-          //   sku: "PKTBTN-D",
-          //   variant: "Dada",
-          //   sales_type: "Dine in",
-          //   quantity: 3,
-          //   price: 20000,
-          //   option: "Nasi TO",
-          //   option_price: 0,
-          //   discount_name: "50%",
-          //   discount_percentage: 0.5,
-          //   additional_costs: [
-          //     { name: "PPN 5%", percentage: 0.05, total: 1500 },
-          //   ],
-          //   total: 60000,
-          //   total_discount: 30000,
-          // },
+      report: {
+        total_gross_sales: 99000,
+        discounts: [
+          {
+            discount_name: "50%",
+            discount_percentage: 0.5,
+            amount: 45000,
+          },
         ],
-        payment: {
-          // id: 1,
-          // number: "PYMT-1638785651",
-          // date: "2021-12-06",
-          // type: "Cash",
-          // received: 100000,
-        },
-        total_price: null,
-        total_option: null,
-        total_discount: null,
-        additional_cost: [{ name: "", total: null }],
-        total_additional_cost: null,
-        total: null,
-        change: null,
-        store: {
-          name: "",
-          address: "",
-          cashier_name: "",
-        },
+        net_sales: 54000,
+        additional_costs: [
+          {
+            add_cost_name: "PPN 5%",
+            percentage: 0.05,
+            amount: 2250,
+          },
+        ],
+        total_collect: 56250,
+        items: [
+          {
+            store_item_name: "Paket Kampung",
+            store_item_id: 1,
+            variant: "Dada",
+            sold: "3",
+            gross_sales: "90000",
+            total_discount: 15000,
+            net_sale: 45000,
+            additional_cost: 2250,
+            total_collected: 47250,
+          },
+          {
+            store_item_name: "Air Mineral",
+            store_item_id: 3,
+            variant: null,
+            sold: "3",
+            gross_sales: "9000",
+            total_discount: 0,
+            net_sale: 9000,
+            additional_cost: null,
+            total_collected: null,
+          },
+        ],
       },
 
       showSideMenu: true,
@@ -465,6 +543,9 @@ export default {
   methods: {
     currency(number) {
       return numberFormat.currency(number);
+    },
+    separator(number) {
+      return numberFormat.separator(number);
     },
     formatDateInIDN(date) {
       return moment(date).format("LL");

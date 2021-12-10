@@ -222,13 +222,25 @@ export default {
   data() {
     return {
       userInfo: {
+        token: "",
         info: {
           user_id: null,
           username: "",
           name: "",
-          role: "",
-          store_id: null,
-          store_name: "",
+          warehouses: [
+            {
+              id: null,
+              name: "",
+              address: "",
+            },
+          ],
+          stores: [
+            {
+              id: null,
+              name: "",
+              address: "",
+            },
+          ],
         },
       },
       showAllReports: true,

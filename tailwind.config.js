@@ -3,6 +3,9 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      screens: {
+        'mobile': {'min': '350px', 'max': '768px'},
+      },
       backgroundColor: theme => ({
         'primary-green':'#40995B',
         // 'modern':'#466954',
