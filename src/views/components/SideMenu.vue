@@ -65,7 +65,7 @@
         overflow-y-auto
       "
     >
-      <router-link to="/home" class="py-4 flex items-center">
+      <!-- <router-link to="/home" class="py-4 flex items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-6 w-6"
@@ -81,7 +81,7 @@
           />
         </svg>
         <p class="ml-1">Dashboard</p>
-      </router-link>
+      </router-link> -->
       <div @click="showReports()" class="py-4 flex items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -161,7 +161,7 @@
           <p class="ml-1">Recap Cashier</p>
         </router-link>
       </div>
-      <router-link to="/home" class="py-4 flex items-center">
+      <!-- <router-link to="/home" class="py-4 flex items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-6 w-6"
@@ -177,7 +177,7 @@
           />
         </svg>
         <p class="ml-1">Point of Sale</p>
-      </router-link>
+      </router-link> -->
     </div>
 
     <!-- logout -->
