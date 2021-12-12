@@ -1,8 +1,8 @@
 <template>
-  <div id="container" class="h-full relative bg-white">
+  <div id="container" class="h-full relative bg-gray-100">
     <div class="relative h-full w-full p-3">
-      <div class="bg-white h-full overflow-y-auto pb-3">
-        <div class="sticky top-0 z-10 bg-white">
+      <div class="h-full overflow-y-auto pb-3">
+        <div class="sticky top-0 pb-3 z-10 bg-gray-100">
           <p class="text-center uppercase p-3 md:mb-3 font-bold">
             Recap cashier
           </p>
@@ -65,9 +65,11 @@
             </select>
           </div>
         </div>
-        <div v-if="selectedUser != null" class="py-3 flex">
+        <div v-if="selectedUser != null" class="py-3 flex w-full">
           <!-- <div class="flex bg-red-200"> -->
-          <div class="relative font-mono mx-auto z-0 top-5">
+          <div
+            class="relative font-mono mx-auto z-0 top-5 mobile:w-full md:w-auto"
+          >
             <div class="absolute -top-3 -left-1 text-gray-500">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -84,35 +86,62 @@
                 />
               </svg>
             </div>
-            <div class="bg-white px-3 py-3 shadow-xl border-b-4">
+            <div class="bg-white px-3 py-3 shadow-xl">
               <p class="text-center font-bold uppercase">
                 {{ recapCash.user_info.store_name }}
               </p>
               <p class="text-center">
                 {{ recapCash.user_info.store_address }}
               </p>
-              <p class="text-center">======================================</p>
-
+              <div class="border-gray-600 border-double border-b-4 my-1"></div>
               <div class="flex">
-                <!-- <p class="mobile:hidden">Tanggal</p> -->
+                <p>Waktu Cetak</p>
                 <p class="text-right flex-grow">
-                  {{ formatDateInIDN(datePeriod.from) }} s/d
-                  {{ formatDateInIDN(datePeriod.to) }}
+                  {{ formatDateTime(recapCash.access_time) }}
+                </p>
+              </div>
+              <div class="border-gray-600 border-dotted border-b-2 my-1"></div>
+              <div class="flex">
+                <p>Periode</p>
+                <p
+                  v-if="recapCash.date.from != recapCash.date.to"
+                  class="text-right flex-grow"
+                >
+                  {{ formatDateInIDN(recapCash.date.from) }} -
+                  {{ formatDateInIDN(recapCash.date.to) }}
+                </p>
+                <p
+                  v-if="recapCash.date.from === recapCash.date.to"
+                  class="text-right flex-grow"
+                >
+                  {{ formatDateInIDN(recapCash.date.from) }}
                 </p>
               </div>
               <div class="grid grid-cols-2">
                 <p>Kasir</p>
                 <p class="text-right">{{ recapCash.user_info.name }}</p>
               </div>
+              <div
+                class="
+                  border-gray-600 border-dashed border-b-2 border-t-2
+                  py-0.5
+                  my-1
+                "
+              ></div>
 
-              <p class="text-center">======================================</p>
               <div class="flex items-center content-center py-3">
                 <p>MODAL</p>
                 <p class="text-right flex-grow">
                   {{ currency(recapCash.total_patty_cash) }}
                 </p>
               </div>
-              <p class="text-center">======================================</p>
+              <div
+                class="
+                  border-gray-600 border-dashed border-b-2 border-t-2
+                  py-0.5
+                  my-1
+                "
+              ></div>
 
               <p class="text-center">PENJUALAN</p>
               <p class="text-sm">Type Pembayaran:</p>
@@ -126,14 +155,21 @@
                   {{ currency(sales.total) }}
                 </p>
               </div>
-              <p class="text-center">--------------------------------------</p>
+              <div class="border-gray-600 border-dotted border-b-2 my-1"></div>
               <div class="grid grid-flow-col grid-cols-6 font-bold">
-                <p class="col-span-4 uppercase text-right">Total</p>
-                <p class="col-span-2 text-right">
+                <p class="col-span-2 uppercase text-center">Total</p>
+                <p class="col-span-6 text-right">
                   {{ currency(totalSales) }}
                 </p>
               </div>
-              <p class="text-center">======================================</p>
+              <div
+                class="
+                  border-gray-600 border-dashed border-b-2 border-t-2
+                  py-0.5
+                  my-1
+                "
+              ></div>
+
               <p class="text-center">KAS KELUAR</p>
               <p class="text-sm">rincian (cash):</p>
               <div
@@ -141,34 +177,56 @@
                 :key="cashOut.key"
                 class="grid grid-flow-col grid-cols-6 text-sm"
               >
-                <p class="col-span-4 capitalize ml-2">
+                <p class="col-span-3 capitalize ml-2 mobile:truncate">
                   {{ ++index }}. {{ cashOut.note }}
                 </p>
-                <p class="col-span-2 text-right">
+                <p class="col-span-3 text-right">
                   ({{ currency(cashOut.amount) }})
                 </p>
               </div>
-              <p class="text-center">--------------------------------------</p>
+              <div class="border-gray-600 border-dotted border-b-2 my-1"></div>
               <div class="grid grid-flow-col grid-cols-6 font-bold">
-                <p class="col-span-4 uppercase text-right">Total cash</p>
-                <p class="col-span-2 text-right">
+                <p class="col-span-2 uppercase text-center">Total</p>
+                <p class="col-span-6 text-right">
                   ({{ currency(totalCashOut) }})
                 </p>
               </div>
+              <div
+                class="
+                  border-gray-600 border-dashed border-b-2 border-t-2
+                  py-0.5
+                  my-1
+                "
+              ></div>
 
-              <p class="text-center">======================================</p>
-              <div class="grid grid-flow-col grid-cols-6 font-bold">
-                <p class="col-span-4 uppercase">SISA KAS (cash)</p>
-                <p class="col-span-2 text-right">{{ currency(totalCash) }}</p>
+              <div
+                class="
+                  grid
+                  mobile:grid-flow-row
+                  md:grid-flow-col
+                  grid-cols-6
+                  font-bold
+                "
+              >
+                <p class="col-span-6 uppercase">SISA KAS (cash)</p>
+                <p class="col-span-6 text-right">
+                  {{ currency(totalCash) }}
+                </p>
               </div>
-              <p class="text-center">--------------------------------------</p>
+              <div class="border-gray-600 border-dotted border-b-2 my-1"></div>
               <div class="grid grid-flow-col grid-cols-6 font-bold">
-                <p class="col-span-4 uppercase">SISA MODAL</p>
-                <p class="col-span-2 text-right">
+                <p class="col-span-6 uppercase">SISA MODAL</p>
+                <p class="col-span-6 text-right">
                   {{ currency(totalModal) }}
                 </p>
               </div>
-              <p class="text-center">======================================</p>
+              <div
+                class="
+                  border-gray-600 border-dashed border-b-2 border-t-2
+                  py-0.5
+                  my-1
+                "
+              ></div>
             </div>
             <br /><br /><br /><br />
           </div>
@@ -353,6 +411,9 @@ export default {
     },
     formatDateInIDN(date) {
       return moment(date).format("LL");
+    },
+    formatDateTime(date) {
+      return moment(date).format("LL, h:mm:ss");
     },
     showMenu() {
       if (this.showSideMenu === false) {
