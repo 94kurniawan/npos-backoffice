@@ -3,6 +3,7 @@ import Login from '../views/Login.vue'
 // import Home from '../views/Home.vue'
 import SalesSummary from '../views/reports/SalesSummary.vue'
 import RecapCashier from '../views/reports/RecapCashier.vue'
+import ValidationKey from '../views/ValidationKey.vue'
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: '/recap-cashier',
     name: 'RecapCashier',
     component: RecapCashier
+  },
+  {
+    path: '/validation-key',
+    name: 'ValidationKey',
+    component: ValidationKey
   },
   // {
   //   path: '/about',
