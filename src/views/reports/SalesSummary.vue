@@ -221,6 +221,39 @@
       </div>
     </div>
 
+    <!-- print button -->
+    <button
+      @click="print()"
+      type="submit"
+      class="
+        absolute
+        flex
+        bg-blue-400
+        text-white
+        p-3
+        rounded
+        items-center
+        bottom-6
+        left-4
+      "
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+        />
+      </svg>
+      <p class="px-1">Print</p>
+    </button>
+
     <!-- side menu -->
     <button
       @click="showMenu()"
@@ -352,81 +385,6 @@ export default {
     };
   },
 
-  computed: {
-    salesHistory() {
-      let arr = [];
-      let user = this.sales.cashier;
-      // let user = JSON.parse(localStorage.getItem("user"));
-      this.sales.orders.forEach((sale) => {
-        let data = sale;
-        let totalPrice = 0;
-        let totalOption = 0;
-        let totalDiscount = 0;
-        let additionalCost = [];
-        let totalAdditionalCost = 0;
-
-        data.items.forEach((item) => {
-          if (!item.discount_percentage) {
-            item.discount_percentage = 0;
-          }
-
-          if (!item.option_price) {
-            item.option_price = 0;
-          }
-
-          let total = item.quantity * item.price;
-          let discount = total * item.discount_percentage || 0;
-          let totalAfterDiscount = total - discount;
-          totalPrice += total;
-          totalOption += item.option_price || 0;
-          totalDiscount += discount;
-          item.total = total;
-          item.total_discount = discount;
-          // additional cost
-          item.additional_costs.forEach((cost) => {
-            let obj = {
-              name: cost.name,
-              total: cost.percentage * totalAfterDiscount,
-            };
-            cost.total = obj.total;
-            let findAdditionalCost = [];
-            additionalCost.forEach((addCost) => {
-              if (addCost.name === obj.name) {
-                addCost.total += obj.total;
-                findAdditionalCost.push(true);
-              } else {
-                findAdditionalCost.push(false);
-              }
-            });
-            if (!findAdditionalCost.includes(true)) {
-              additionalCost.push(obj);
-            }
-          });
-        });
-        // total additional cost
-        additionalCost.forEach((cost) => {
-          totalAdditionalCost += cost.total;
-        });
-
-        data.total_price = totalPrice;
-        data.total_option = totalOption;
-        data.total_discount = totalDiscount;
-        data.additional_cost = additionalCost;
-        data.total_additional_cost = totalAdditionalCost;
-        data.total =
-          totalPrice + totalOption + totalAdditionalCost - totalDiscount;
-        data.change = data.payment.received - data.total;
-        data.store = {
-          // name: user.store_name.toUpperCase(),
-          address: user.store_address,
-          cashier_name: user.name,
-        };
-        arr.push(data);
-      });
-      return arr;
-    },
-  },
-
   methods: {
     currency(number) {
       return numberFormat.currency(number);
@@ -468,6 +426,14 @@ export default {
       } catch (error) {
         console.log(error.response);
       }
+    },
+    print() {
+      localStorage.setItem("salesSummary", JSON.stringify(this.report));
+      let router = this.$router.resolve({
+        name: "print-storages",
+      });
+
+      window.open(router.href, "", "width=1000,height=650");
     },
   },
 
