@@ -1,45 +1,53 @@
 <template>
-  <div id="container" class="h-full relative bg-gray-100">
-    <div class="relative h-full w-full md:w-1/3 md:mx-auto p-3 overflow-y-auto">
-      <p class="text-center uppercase p-3 md:mb-3 font-bold">Validation Key</p>
-      <div class="grid grid-flow-row gap-1 bg-white rounded-lg shadow-lg">
-        <div
-          class="
-            flex
-            p-3
-            justify-between
-            items-center
-            content-center
-            bg-blue-200
-            rounded-t-lg
-          "
-        >
-          <p>STORE</p>
-          <p>KEY</p>
-        </div>
-        <div class="flex p-3 justify-between items-center content-center">
-          <p>Nama Store</p>
-          <p>122345454k</p>
-        </div>
-        <div class="flex p-3 justify-between items-center content-center">
-          <p>Nama Store</p>
-          <p>122345454k</p>
-        </div>
-        <div class="flex p-3 justify-between items-center content-center">
-          <p>Nama Store</p>
-          <p>122345454k</p>
-        </div>
-        <div class="flex p-3 justify-between items-center content-center">
-          <p>Nama Store</p>
-          <p>122345454k</p>
-        </div>
-        <div class="flex p-3 justify-between items-center content-center">
-          <p>Nama Store</p>
-          <p>122345454k</p>
-        </div>
-        <div class="flex p-3 justify-between items-center content-center">
-          <p>Nama Store</p>
-          <p>122345454k</p>
+  <div id="container" class="h-full relative bg-gray-100 md:bg-white">
+    <div class="relative h-full w-full md:w-1/3 p-3">
+      <p class="bg-gray-100 text-center uppercase p-3 md:mb-3 font-bold">
+        Validation Key
+      </p>
+
+      <div class="h-4/6 overflow-y-auto">
+        <div class="grid grid-flow-row gap-1 pb-5 rounded-lg shadow-lg">
+          <div
+            class="
+              sticky
+              top-0
+              flex
+              p-3
+              justify-between
+              items-center
+              content-center
+              bg-blue-200
+              rounded-t-lg
+            "
+          >
+            <p>STORE</p>
+            <p>KEY</p>
+          </div>
+          <div
+            v-for="key in keys"
+            :key="key.key"
+            class="
+              p-3
+              grid grid-cols-5
+              gap-1
+              items-start
+              content-center
+              odd:bg-blue-50
+            "
+          >
+            <p class="col-span-3">{{ key.store_name }}</p>
+            <i
+              v-if="key.key === null"
+              class="col-span-2 text-right text-gray-400"
+              >belum ada key</i
+            >
+            <p
+              v-if="key.key != null"
+              class="col-span-2 text-right text-blue-600"
+            >
+              {{ key.key }}
+            </p>
+          </div>
         </div>
       </div>
       <div
@@ -57,20 +65,22 @@
         <div class="grid items-center content-center grid-cols-3 gap-1">
           <label class="px-2">STORE</label>
           <select
-            v-model="selectedUser"
+            v-model="request.store_id"
             class="
               w-full
               col-span-2
               bg-white
-              py-3
-              pr-3
-              pl-5
+              p-3
               border-2
               outline-none
               rounded-lg
             "
           >
-            <option v-for="user in users" :key="user.key" :value="user.id">
+            <option
+              v-for="user in user.info.stores"
+              :key="user.key"
+              :value="user.id"
+            >
               {{ user.name }}
             </option>
           </select>
@@ -78,7 +88,8 @@
         <div class="grid items-center content-center grid-cols-3 gap-1">
           <label class="px-2">KEY</label>
           <input
-            placeholder="masukkan validation key baru"
+            v-model="request.key"
+            placeholder="validation key baru"
             type="text"
             class="
               w-full
@@ -91,7 +102,9 @@
             "
           />
         </div>
-        <button class="p-3 bg-blue-400 text-white">save</button>
+        <button @click="postNewKey()" class="p-3 bg-blue-400 text-white">
+          save
+        </button>
       </div>
     </div>
 
@@ -157,9 +170,6 @@
 </template>
 
 <script>
-import moment from "moment";
-import "moment/locale/id";
-import * as numberFormat from "@/custom_package/number.js";
 import SideMenu from "@/views/components/SideMenu.vue";
 import axios from "axios";
 let apiHost = process.env.VUE_APP_BACKEND_HOST;
@@ -173,108 +183,22 @@ export default {
   data() {
     return {
       user: JSON.parse(localStorage.getItem("user")),
-      datePeriod: {
-        from: moment().format("YYYY-MM-DD"),
-        to: moment().format("YYYY-MM-DD"),
-      },
-
-      users: [],
-      selectedUser: null,
-
-      recapCash: {
-        user_info: {
-          user_id: 4,
-          username: "kasir_maleber",
-          name: "Kasir Maleber",
-          role: "cashier",
-          store_id: 1,
-          store_name: "Pada suka Cab. Maleber",
-          store_address: "Jln. Maleber",
-        },
-        total_sales: [
-          {
-            id: null,
-            name: "",
-            total: null,
-          },
-        ],
-        total_cash_out: "",
-        cash_outs: [
-          {
-            id: null,
-            note: "",
-            amount: null,
-          },
-        ],
-        total_patty_cash: null,
-      },
-
       showSideMenu: false,
+      keys: [
+        {
+          store_id: null,
+          store_name: "",
+          key: "",
+        },
+      ],
+      request: {
+        store_id: "",
+        key: "",
+      },
     };
   },
 
-  watch: {
-    datePeriod: {
-      handler: function (val, oldVal) {
-        this.fetchRecapCash();
-      },
-      deep: true,
-    },
-    selectedUser: {
-      handler: function () {
-        this.fetchRecapCash();
-      },
-      deep: true,
-    },
-  },
-
-  computed: {
-    totalSales() {
-      let total = 0;
-      this.recapCash.total_sales.forEach((sales) => {
-        total += sales.total;
-      });
-      return total;
-    },
-    totalCashOut() {
-      let total = 0;
-      this.recapCash.cash_outs.forEach((cash) => {
-        total += cash.amount || 0;
-      });
-      return total;
-    },
-    totalCash() {
-      let cash = this.recapCash.total_sales[0].total;
-      let total = cash - this.totalCashOut;
-      if (total < 0) {
-        total = 0;
-      }
-      return total;
-    },
-    totalModal() {
-      let modal = +this.recapCash.total_patty_cash;
-      let cash = this.recapCash.total_sales[0].total;
-      let total = cash - this.totalCashOut;
-      if (total < 0) {
-        modal = +this.recapCash.total_patty_cash + total;
-      }
-      return modal;
-    },
-  },
-
   methods: {
-    currency(number) {
-      return numberFormat.currency(number);
-    },
-    separator(number) {
-      return numberFormat.separator(number);
-    },
-    formatDateInIDN(date) {
-      return moment(date).format("LL");
-    },
-    formatDateTime(date) {
-      return moment(date).format("LL, h:mm:ss");
-    },
     showMenu() {
       if (this.showSideMenu === false) {
         this.showSideMenu = true;
@@ -288,33 +212,33 @@ export default {
         this.showSideMenu = false;
       }
     },
-    async fetchRecapCash() {
+    async fetchKeys() {
       try {
         let headers = { Authorization: `Bearer ${this.user.token}` };
-        const response = await axios.get(apiHost + "/api/store/recap-cashier", {
-          headers,
-          params: {
-            date_from: this.datePeriod.from,
-            date_to: this.datePeriod.to,
-            store_id: localStorage.getItem("selectedStore"),
-            user_id: this.selectedUser,
-          },
-        });
-        this.recapCash = response.data.data;
+        const response = await axios.get(
+          apiHost + "/api/users/validation-keys",
+          {
+            headers,
+          }
+        );
+        this.keys = response.data.data;
       } catch (error) {
         console.log(error.response);
       }
     },
-    async fetchUsers() {
+    async postNewKey() {
       try {
         let headers = { Authorization: `Bearer ${this.user.token}` };
-        const response = await axios.get(apiHost + "/api/users", {
-          headers,
-          params: {
-            store_id: localStorage.getItem("selectedStore"),
-          },
-        });
-        this.users = response.data.data;
+        const response = await axios.post(
+          apiHost + "/api/users/validation-keys",
+          this.request,
+          {
+            headers,
+          }
+        );
+        this.fetchKeys();
+        alert(response.data.message);
+        this.request = {};
       } catch (error) {
         console.log(error.response);
       }
@@ -322,8 +246,7 @@ export default {
   },
 
   created() {
-    this.fetchRecapCash();
-    this.fetchUsers();
+    this.fetchKeys();
   },
 };
 </script>
