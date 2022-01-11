@@ -1,8 +1,8 @@
 <template>
   <div id="container" class="h-full relative bg-white">
     <div class="relative h-full w-full p-3">
-      <div class="bg-white h-full overflow-y-auto pb-3">
-        <div class="sticky top-0">
+      <div class="bg-white h-full overflow-y-auto pb-20">
+        <div class="sticky top-0 bg-white">
           <p class="text-center uppercase p-3 md:mb-3 font-bold">
             Sales report - summary
           </p>
@@ -19,7 +19,7 @@
           >
             <label class="mobile:hidden col-start-4 px-2">Period</label>
             <input
-              @change="fetchSales()"
+              @change="fetchReport()"
               v-model="datePeriod.from"
               type="date"
               class="
@@ -33,7 +33,7 @@
               "
             />
             <input
-              @change="fetchSales()"
+              @change="fetchReport()"
               v-model="datePeriod.to"
               type="date"
               class="
@@ -109,7 +109,7 @@
 
           <p class="px-4 pt-4">Sales Details :</p>
           <table class="w-full">
-            <thead class="sticky top-10 text-sm">
+            <thead class="sticky top-24 bg-white text-sm">
               <tr class="uppercase">
                 <th class="py-3 px-4 text-left">item</th>
                 <th class="py-3 px-4 text-left mobile:hidden">variant</th>
