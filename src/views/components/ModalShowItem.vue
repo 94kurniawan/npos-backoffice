@@ -1,7 +1,8 @@
 <template>
   <div
-    @click="closeModal()"
+    @click="closeModalWindow()"
     class="
+      hidden
       fixed
       inset-0
       bg-gray-600 bg-opacity-50
@@ -31,7 +32,10 @@
           <i class="uppercase not-italic">{{ item.name }}</i>
         </p>
         <div class="px-4">
-          <button class="bg-modern-green text-white py-3 px-6 rounded-md">
+          <button
+            @click="goToEditItem()"
+            class="bg-modern-green text-white py-3 px-6 rounded-md"
+          >
             Edit
           </button>
         </div>
@@ -126,6 +130,16 @@ export default {
     closeModal() {
       let modal = document.getElementById("modal-show-item");
       modal.style.display = "none";
+    },
+    closeModalWindow() {
+      let modal = document.getElementById("modal-show-item");
+      if (window.event.target == modal) {
+        modal.style.display = "none";
+      }
+    },
+    goToEditItem() {
+      localStorage.setItem("itemSelected", JSON.stringify(this.item));
+      this.$router.push("edit-item");
     },
   },
 

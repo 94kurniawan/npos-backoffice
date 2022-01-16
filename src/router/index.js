@@ -4,7 +4,8 @@ import Login from '../views/Login.vue'
 import SalesSummary from '../views/reports/SalesSummary.vue'
 import RecapCashier from '../views/reports/RecapCashier.vue'
 import ValidationKey from '../views/ValidationKey.vue'
-import StoreItems from '../views/StoreItems.vue'
+import StoreItems from '@/views/store_items/StoreItems.vue'
+import EditItem from '@/views/store_items/EditItem.vue'
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     path: '/store-items',
     name: 'StoreItems',
     component: StoreItems
+  },
+  {
+    path: '/edit-item',
+    name: 'EditItem',
+    component: EditItem
   },
   // {
   //   path: '/about',

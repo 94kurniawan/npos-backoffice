@@ -197,7 +197,7 @@ export default {
         },
       ],
       // Temporary Data
-      showSideMenu: true,
+      showSideMenu: false,
       itemSelected: {
         id: 31,
         name: "Ayam Satuan Betina Bakar",
