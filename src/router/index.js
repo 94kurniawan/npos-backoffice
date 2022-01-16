@@ -4,6 +4,7 @@ import Login from '../views/Login.vue'
 import SalesSummary from '../views/reports/SalesSummary.vue'
 import RecapCashier from '../views/reports/RecapCashier.vue'
 import ValidationKey from '../views/ValidationKey.vue'
+import StoreItems from '../views/StoreItems.vue'
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
     path: '/validation-key',
     name: 'ValidationKey',
     component: ValidationKey
+  },
+  {
+    path: '/store-items',
+    name: 'StoreItems',
+    component: StoreItems
   },
   // {
   //   path: '/about',
