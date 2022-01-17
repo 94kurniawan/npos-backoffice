@@ -64,7 +64,7 @@
               </svg>
             </div>
             <div
-              v-for="variant in item.variants"
+              v-for="(variant, index) in item.variants"
               :key="variant.key"
               class="
                 border-2
@@ -74,8 +74,35 @@
                 rounded-md
                 active:bg-gray-200
                 text-center
+                relative
               "
             >
+              <div
+                @click="removeVariant(index)"
+                class="
+                  absolute
+                  items-center
+                  justify-center
+                  flex
+                  -top-3
+                  -right-3
+                  rounded-full
+                  text-red-500
+                "
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </div>
               {{ variant.name }}
             </div>
           </div>
@@ -271,7 +298,11 @@ let apiHost = process.env.VUE_APP_BACKEND_HOST;
 
 export default {
   name: "EditItem",
-  components: { ModalAddVariant, ModalEditOptions, ModalEditSalesType },
+  components: {
+    ModalAddVariant,
+    ModalEditOptions,
+    ModalEditSalesType,
+  },
 
   data() {
     return {
@@ -366,6 +397,9 @@ export default {
     addNewVariant(variant) {
       this.item.variants.push(variant);
     },
+    removeVariant(index) {
+      this.item.variants.splice(index, 1);
+    },
 
     showEditOptions() {
       let modal = document.getElementById("modal-edit-options");
@@ -412,7 +446,6 @@ export default {
         );
         this.$router.go(-1);
         alert("berhasil mengubah data");
-        console.log(response);
         this.reset();
       } catch (error) {
         console.log(error);
