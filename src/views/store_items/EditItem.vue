@@ -84,6 +84,7 @@
           <p class="py-2 text-sm text-gray-500">Options</p>
           <div class="grid grid-flow-row grid-cols-3 gap-2">
             <div
+              @click="showEditOptions()"
               class="
                 border-2
                 p-3
@@ -240,6 +241,13 @@
 
     <!-- Modal Add Variant -->
     <modal-add-variant @add-new-variant="addNewVariant" />
+
+    <!-- Modal Edit Options -->
+    <modal-edit-options
+      :options="options"
+      :itemOptions="item.options"
+      @edit-options="editOptions"
+    />
   </div>
 </template>
 
@@ -249,11 +257,12 @@ import "moment/locale/id";
 import * as numberFormat from "@/custom_package/number.js";
 import axios from "axios";
 import ModalAddVariant from "@/views/components/ModalAddVariant.vue";
+import ModalEditOptions from "@/views/components/ModalEditOptions.vue";
 let apiHost = process.env.VUE_APP_BACKEND_HOST;
 
 export default {
   name: "EditItem",
-  components: { ModalAddVariant },
+  components: { ModalAddVariant, ModalEditOptions },
 
   data() {
     return {
@@ -266,10 +275,51 @@ export default {
           name: "",
         },
       ],
+      options: [
+        {
+          id: null,
+          name: "",
+          price: null,
+        },
+      ],
+      optionsSelected: [],
+      salesType: [
+        {
+          id: 1,
+          name: "Dine In",
+        },
+        {
+          id: 2,
+          name: "Take Away",
+        },
+        {
+          id: 3,
+          name: "Go Food",
+        },
+        {
+          id: 4,
+          name: "Grab Food",
+        },
+        {
+          id: 5,
+          name: "Shopee Food",
+        },
+        {
+          id: 6,
+          name: "Maxim Food",
+        },
+        {
+          id: 7,
+          name: "Online Shop",
+        },
+      ],
     };
   },
 
   methods: {
+    reset() {
+      this.optionsSelected = [];
+    },
     currency(number) {
       return numberFormat.currency(number);
     },
@@ -300,6 +350,34 @@ export default {
         console.log(error.response);
       }
     },
+    async fetchOptions() {
+      try {
+        let headers = { Authorization: `Bearer ${this.user.token}` };
+        const response = await axios.get(apiHost + "/api/store/options", {
+          headers,
+          params: {
+            store_id: localStorage.getItem("selectedStore"),
+          },
+        });
+        this.options = response.data.data;
+      } catch (error) {
+        console.log(error.response);
+      }
+    },
+    async fetchSalesType() {
+      try {
+        let headers = { Authorization: `Bearer ${this.user.token}` };
+        const response = await axios.get(apiHost + "/api/store/options", {
+          headers,
+          params: {
+            store_id: localStorage.getItem("selectedStore"),
+          },
+        });
+        this.salesType = response.data.data;
+      } catch (error) {
+        console.log(error.response);
+      }
+    },
 
     showAddNewVariant() {
       let modal = document.getElementById("modal-add-variant");
@@ -309,8 +387,27 @@ export default {
       this.item.variants.push(variant);
     },
 
+    showEditOptions() {
+      let modal = document.getElementById("modal-edit-options");
+      modal.style.display = "block";
+    },
+    editOptions(options, viewOptions) {
+      let data = JSON.parse(options);
+      this.optionsSelected = data;
+      this.item.options = viewOptions;
+    },
+
+    removeOptionsObject() {
+      if (this.optionsSelected.length == 0) {
+        this.item.options.forEach((option) => {
+          this.optionsSelected.push(option.id);
+        });
+      }
+    },
     async save() {
       try {
+        this.removeOptionsObject();
+        this.item.options = this.optionsSelected;
         let headers = { Authorization: `Bearer ${this.user.token}` };
         const response = await axios.put(
           apiHost + "/api/store/items",
@@ -319,8 +416,10 @@ export default {
             headers,
           }
         );
-        alert("berhasil edit");
+        this.$router.go(-1);
+        alert("berhasil mengubah data");
         console.log(response);
+        this.reset();
       } catch (error) {
         console.log(error);
       }
@@ -330,6 +429,7 @@ export default {
   mounted() {
     this.getItem();
     this.fetchCategories();
+    this.fetchOptions();
   },
 };
 </script>
