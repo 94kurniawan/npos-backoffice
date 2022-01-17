@@ -134,6 +134,7 @@
           <p class="py-2 text-sm text-gray-500">Sales Type</p>
           <div class="grid grid-flow-row grid-cols-2 md:grid-cols-3 gap-2">
             <div
+              @click="showEditSalesType()"
               class="
                 border-2
                 p-3
@@ -248,6 +249,13 @@
       :itemOptions="item.options"
       @edit-options="editOptions"
     />
+
+    <!-- Modal Edit Sales Type -->
+    <modal-edit-sales-type
+      :salesType="salesType"
+      :itemSalesType="item.sales_types"
+      @edit-sales-type="editSalesType"
+    />
   </div>
 </template>
 
@@ -258,11 +266,12 @@ import * as numberFormat from "@/custom_package/number.js";
 import axios from "axios";
 import ModalAddVariant from "@/views/components/ModalAddVariant.vue";
 import ModalEditOptions from "@/views/components/ModalEditOptions.vue";
+import ModalEditSalesType from "../components/ModalEditSalesType.vue";
 let apiHost = process.env.VUE_APP_BACKEND_HOST;
 
 export default {
   name: "EditItem",
-  components: { ModalAddVariant, ModalEditOptions },
+  components: { ModalAddVariant, ModalEditOptions, ModalEditSalesType },
 
   data() {
     return {
@@ -283,36 +292,7 @@ export default {
         },
       ],
       optionsSelected: [],
-      salesType: [
-        {
-          id: 1,
-          name: "Dine In",
-        },
-        {
-          id: 2,
-          name: "Take Away",
-        },
-        {
-          id: 3,
-          name: "Go Food",
-        },
-        {
-          id: 4,
-          name: "Grab Food",
-        },
-        {
-          id: 5,
-          name: "Shopee Food",
-        },
-        {
-          id: 6,
-          name: "Maxim Food",
-        },
-        {
-          id: 7,
-          name: "Online Shop",
-        },
-      ],
+      salesType: [],
     };
   },
 
@@ -367,7 +347,7 @@ export default {
     async fetchSalesType() {
       try {
         let headers = { Authorization: `Bearer ${this.user.token}` };
-        const response = await axios.get(apiHost + "/api/store/options", {
+        const response = await axios.get(apiHost + "/api/store/sales-types", {
           headers,
           params: {
             store_id: localStorage.getItem("selectedStore"),
@@ -396,7 +376,6 @@ export default {
       this.optionsSelected = data;
       this.item.options = viewOptions;
     },
-
     removeOptionsObject() {
       if (this.optionsSelected.length == 0) {
         this.item.options.forEach((option) => {
@@ -404,6 +383,21 @@ export default {
         });
       }
     },
+
+    showEditSalesType() {
+      let modal = document.getElementById("modal-edit-sales-type");
+      modal.style.display = "block";
+    },
+    editSalesType(salesType) {
+      let data = [];
+      salesType.forEach((selected) => {
+        if (selected.price) {
+          data.push(selected);
+        }
+      });
+      this.item.sales_types = data;
+    },
+
     async save() {
       try {
         this.removeOptionsObject();
@@ -430,6 +424,7 @@ export default {
     this.getItem();
     this.fetchCategories();
     this.fetchOptions();
+    this.fetchSalesType();
   },
 };
 </script>
