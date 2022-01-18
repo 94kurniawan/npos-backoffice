@@ -31,9 +31,11 @@
           v-if="item.have_variants == true"
           class="p-2 grid grid-flow-row grid-cols-1 md:grid-cols-2"
         >
-          <p class="py-2 text-sm text-gray-500">Variants</p>
+          <p class="py-2 text-sm text-gray-500">
+            Variants (Saat ini belum bisa diedit)
+          </p>
           <div class="grid grid-flow-row grid-cols-3 gap-2">
-            <div
+            <!-- <div
               @click="showAddNewVariant()"
               class="
                 border-2
@@ -62,9 +64,9 @@
                   d="M12 4v16m8-8H4"
                 />
               </svg>
-            </div>
+            </div> -->
             <div
-              v-for="(variant, index) in item.variants"
+              v-for="variant in item.variants"
               :key="variant.key"
               class="
                 border-2
@@ -77,7 +79,7 @@
                 relative
               "
             >
-              <div
+              <!-- <div
                 @click="removeVariant(index)"
                 class="
                   absolute
@@ -102,7 +104,7 @@
                     clip-rule="evenodd"
                   />
                 </svg>
-              </div>
+              </div> -->
               {{ variant.name }}
             </div>
           </div>
