@@ -2,10 +2,38 @@
   <div id="container" class="h-full relative bg-white">
     <div class="relative h-full w-full p-3">
       <div class="bg-white h-full overflow-y-auto pb-20">
-        <div class="sticky top-0 bg-modern-green text-white">
+        <div class="sticky top-0 bg-gray-700 text-white">
           <p class="text-center uppercase p-3 md:mb-3 font-bold">Store Items</p>
         </div>
         <div class="py-3">
+          <button
+            @click="addNewItem()"
+            class="
+              bg-modern-green
+              text-white
+              py-2
+              px-3
+              rounded
+              flex
+              items-center
+            "
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 mr-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
+            </svg>
+            Tambah Item Baru
+          </button>
           <table class="w-full">
             <thead class="sticky top-12 bg-white text-sm">
               <tr class="uppercase">
@@ -213,11 +241,13 @@ export default {
         console.log(error.response);
       }
     },
-
     showItem(item) {
       this.itemSelected = item;
       let modal = document.getElementById("modal-show-item");
       modal.style.display = "block";
+    },
+    addNewItem() {
+      this.$router.push("add-item");
     },
   },
 

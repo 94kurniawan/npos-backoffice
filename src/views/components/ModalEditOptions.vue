@@ -111,12 +111,16 @@ export default {
           }
         });
       });
-      return data;
+      let filterArray = [...new Map(data.map((v) => [v.id, v])).values()];
+      return filterArray;
     },
     saveOptions() {
+      let data = JSON.parse(JSON.stringify(this.optionsSelected));
+      let arr = Array.from(new Set(data));
       this.$emit(
         "edit-options",
-        JSON.stringify(this.optionsSelected),
+        arr,
+        // JSON.stringify(new Set(data)),
         this.viewOptions()
       );
       this.closeModal();

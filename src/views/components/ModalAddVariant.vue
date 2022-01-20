@@ -99,6 +99,10 @@ export default {
     saveVariant() {
       this.$emit("add-new-variant", this.variant);
       this.closeModal();
+      this.variant = {
+        name: "",
+        sku: "",
+      };
     },
   },
 };

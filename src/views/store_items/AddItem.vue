@@ -3,7 +3,22 @@
     <div class="relative h-full w-full p-3">
       <div class="bg-white h-full overflow-y-auto pb-20">
         <div class="sticky top-0 bg-modern-green text-white">
-          <p class="text-center uppercase p-3 md:mb-3 font-bold">Edit Item</p>
+          <p class="text-center uppercase p-3 md:mb-3 font-bold">
+            Add New Item
+          </p>
+        </div>
+        <div class="p-2 grid grid-flow-row grid-cols-1 md:grid-cols-2">
+          <p class="py-2 text-sm text-gray-500">Store</p>
+          <select v-model="item.store_id" class="p-3 border rounded">
+            <option
+              v-for="store in user.info.stores"
+              :key="store.key"
+              :value="store.id"
+            >
+              {{ store.name }}
+            </option>
+            <!-- <option value="">test</option> -->
+          </select>
         </div>
         <div class="p-2 grid grid-flow-row grid-cols-1 md:grid-cols-2">
           <p class="py-2 text-sm text-gray-500">Item Name</p>
@@ -27,15 +42,11 @@
             <!-- <option value="">test</option> -->
           </select>
         </div>
-        <div
-          v-if="item.have_variants == true"
-          class="p-2 grid grid-flow-row grid-cols-1 md:grid-cols-2"
-        >
-          <p class="py-2 text-sm text-gray-500">
-            Variants (Saat ini belum bisa diedit)
-          </p>
+        <!-- v-if="item.have_variants == true" -->
+        <div class="p-2 grid grid-flow-row grid-cols-1 md:grid-cols-2">
+          <p class="py-2 text-sm text-gray-500">Variants</p>
           <div class="grid grid-flow-row grid-cols-3 gap-2">
-            <!-- <div
+            <div
               @click="showAddNewVariant()"
               class="
                 border-2
@@ -64,7 +75,7 @@
                   d="M12 4v16m8-8H4"
                 />
               </svg>
-            </div> -->
+            </div>
             <div
               v-for="variant in item.variants"
               :key="variant.key"
@@ -79,7 +90,7 @@
                 relative
               "
             >
-              <!-- <div
+              <div
                 @click="removeVariant(index)"
                 class="
                   absolute
@@ -104,7 +115,7 @@
                     clip-rule="evenodd"
                   />
                 </svg>
-              </div> -->
+              </div>
               {{ variant.name }}
             </div>
           </div>
@@ -299,7 +310,7 @@ import ModalEditSalesType from "../components/ModalEditSalesType.vue";
 let apiHost = process.env.VUE_APP_BACKEND_HOST;
 
 export default {
-  name: "EditItem",
+  name: "AddItem",
   components: {
     ModalAddVariant,
     ModalEditOptions,
@@ -309,7 +320,25 @@ export default {
   data() {
     return {
       user: JSON.parse(localStorage.getItem("user")),
-      item: {},
+      item: {
+        store_id: null, // from user
+        name: "",
+        sku: "",
+        store_category_id: null,
+        variants: [
+          // {
+          //   name: "",
+          //   sku: "",
+          // },
+        ],
+        options: [], // from optionsSelected
+        sales_types: [
+          // {
+          //   id: null,
+          //   price: null,
+          // },
+        ],
+      },
       categories: [
         {
           id: null,
@@ -325,7 +354,12 @@ export default {
         },
       ],
       optionsSelected: [],
-      salesType: [],
+      salesType: [
+        {
+          id: null,
+          name: "",
+        },
+      ],
     };
   },
 
@@ -346,7 +380,7 @@ export default {
       this.$router.go(-1);
     },
     getItem() {
-      this.item = JSON.parse(localStorage.getItem("itemSelected"));
+      // this.item = JSON.parse(localStorage.getItem("itemSelected"));
       // localStorage.removeItem("itemSelected");
     },
     async fetchCategories() {
@@ -396,7 +430,8 @@ export default {
       let modal = document.getElementById("modal-add-variant");
       modal.style.display = "block";
     },
-    addNewVariant(variant) {
+    addNewVariant(data) {
+      let variant = JSON.parse(JSON.stringify(data));
       this.item.variants.push(variant);
     },
     removeVariant(index) {
@@ -411,13 +446,13 @@ export default {
       this.optionsSelected = options;
       this.item.options = viewOptions;
     },
-    removeOptionsObject() {
-      if (this.optionsSelected.length == 0) {
-        this.item.options.forEach((option) => {
-          this.optionsSelected.push(option.id);
-        });
-      }
-    },
+    // removeOptionsObject() {
+    //   if (this.optionsSelected.length == 0) {
+    //     this.item.options.forEach((option) => {
+    //       this.optionsSelected.push(option.id);
+    //     });
+    //   }
+    // },
 
     showEditSalesType() {
       let modal = document.getElementById("modal-edit-sales-type");
@@ -435,10 +470,10 @@ export default {
 
     async save() {
       try {
-        this.removeOptionsObject();
+        // this.removeOptionsObject();
         this.item.options = this.optionsSelected;
         let headers = { Authorization: `Bearer ${this.user.token}` };
-        const response = await axios.put(
+        const response = await axios.post(
           apiHost + "/api/store/items",
           this.item,
           {
@@ -446,7 +481,8 @@ export default {
           }
         );
         this.$router.go(-1);
-        alert("berhasil mengubah data");
+        alert("berhasil menambah data");
+        console.log(response);
         this.reset();
       } catch (error) {
         console.log(error);

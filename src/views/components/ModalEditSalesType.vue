@@ -103,7 +103,7 @@ export default {
     salesType: {
       handler: function (val, oldVal) {
         this.salesTypeSelected = JSON.parse(JSON.stringify(val));
-        this.fillSalesType();
+        // this.fillSalesType();
       },
       deep: true,
     },
@@ -116,15 +116,15 @@ export default {
   },
 
   methods: {
-    fillSalesType() {
-      this.salesTypeSelected.forEach((type) => {
-        this.itemSalesType.forEach((selected) => {
-          if (type.id == selected.id) {
-            type.price = selected.price;
-          }
-        });
-      });
-    },
+    // fillSalesType() {
+    //   this.salesTypeSelected.forEach((type) => {
+    //     this.itemSalesType.forEach((selected) => {
+    //       if (type.id == selected.id) {
+    //         type.price = selected.price;
+    //       }
+    //     });
+    //   });
+    // },
 
     closeModalWindow() {
       let modal = document.getElementById("modal-edit-sales-type");
