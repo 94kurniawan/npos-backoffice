@@ -7,6 +7,7 @@ import ValidationKey from '../views/ValidationKey.vue'
 import StoreItems from '@/views/store_items/StoreItems.vue'
 import EditItem from '@/views/store_items/EditItem.vue'
 import AddItem from '@/views/store_items/AddItem.vue'
+import RawMaterials from '@/views/raw_materials/RawMaterials.vue'
 
 const routes = [
   {
@@ -48,6 +49,11 @@ const routes = [
     path: '/add-item',
     name: 'AddItem',
     component: AddItem
+  },
+  {
+    path: '/raw-materials',
+    name: 'RawMaterials',
+    component: RawMaterials
   },
   // {
   //   path: '/about',
