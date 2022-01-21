@@ -160,6 +160,23 @@
           </svg>
           <p class="ml-1">Recap Cashier</p>
         </router-link>
+        <router-link to="/stock-history" class="py-4 pl-4 flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
+          </svg>
+          <p class="ml-1">Stock History</p>
+        </router-link>
       </div>
       <router-link to="/validation-key" class="py-4 flex items-center">
         <svg
@@ -195,7 +212,7 @@
         </svg>
         <p class="ml-1">Store Items</p>
       </router-link>
-      <router-link to="/raw-materials" class="py-4 flex items-center">
+      <!-- <router-link to="/raw-materials" class="py-4 flex items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-6 w-6"
@@ -211,7 +228,7 @@
           />
         </svg>
         <p class="ml-1">Bahan Baku</p>
-      </router-link>
+      </router-link> -->
     </div>
 
     <!-- logout -->
