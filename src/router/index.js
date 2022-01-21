@@ -9,6 +9,8 @@ import StoreItems from '@/views/store_items/StoreItems.vue'
 import EditItem from '@/views/store_items/EditItem.vue'
 import AddItem from '@/views/store_items/AddItem.vue'
 import RawMaterials from '@/views/raw_materials/RawMaterials.vue'
+// Print
+import PrintSalesSummary from '@/views/reports/print/PrintSalesSummary.vue'
 
 const routes = [
   {
@@ -60,6 +62,12 @@ const routes = [
     path: '/raw-materials',
     name: 'RawMaterials',
     component: RawMaterials
+  },
+  // Print
+  {
+    path: '/print-sales-summary',
+    name: 'PrintSalesSummary',
+    component: PrintSalesSummary
   },
   // {
   //   path: '/about',

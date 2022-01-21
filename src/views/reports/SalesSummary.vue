@@ -2,7 +2,7 @@
   <div id="container" class="h-full relative bg-white">
     <div class="relative h-full w-full p-3">
       <div class="bg-white h-full overflow-y-auto pb-20">
-        <div class="sticky top-0 bg-white">
+        <div class="bg-white">
           <p class="text-center uppercase p-3 md:mb-3 font-bold">
             Sales report - summary
           </p>
@@ -17,7 +17,7 @@
               gap-1
             "
           >
-            <label class="mobile:hidden col-start-4 px-2">Period</label>
+            <label class="mobile:hidden col-start-2 px-2">Period</label>
             <input
               @change="fetchReport()"
               v-model="datePeriod.from"
@@ -46,6 +46,28 @@
                 rounded-lg
               "
             />
+            <select
+              @change="fetchReport()"
+              v-model="storeSelected"
+              class="
+                col-span-2
+                w-full
+                bg-white
+                px-3
+                py-3.5
+                border-2
+                outline-none
+                rounded-lg
+              "
+            >
+              <option
+                v-for="store in user.info.stores"
+                :key="store.key"
+                :value="store"
+              >
+                {{ store.name }}
+              </option>
+            </select>
           </div>
         </div>
         <div class="py-3">
@@ -336,6 +358,10 @@ export default {
         from: moment().format("YYYY-MM-DD"),
         to: moment().format("YYYY-MM-DD"),
       },
+      storeSelected: {
+        id: null,
+        name: "",
+      },
 
       report: {
         total_gross_sales: 99000,
@@ -408,6 +434,10 @@ export default {
         this.showSideMenu = false;
       }
     },
+    fillStoreSelected() {
+      // this.user = JSON.parse(localStorage.getItem("user"));
+      this.storeSelected = this.user.info.stores[0];
+    },
     async fetchReport() {
       try {
         let headers = { Authorization: `Bearer ${this.user.token}` };
@@ -418,7 +448,7 @@ export default {
             params: {
               date_from: this.datePeriod.from,
               date_to: this.datePeriod.to,
-              store_id: localStorage.getItem("selectedStore"),
+              store_id: this.storeSelected.id,
             },
           }
         );
@@ -428,9 +458,11 @@ export default {
       }
     },
     print() {
+      localStorage.setItem("datePeriod", JSON.stringify(this.datePeriod));
+      localStorage.setItem("storeSelected", JSON.stringify(this.storeSelected));
       localStorage.setItem("salesSummary", JSON.stringify(this.report));
       let router = this.$router.resolve({
-        name: "print-storages",
+        name: "PrintSalesSummary",
       });
 
       window.open(router.href, "", "width=1000,height=650");
@@ -438,6 +470,10 @@ export default {
   },
 
   created() {
+    this.fillStoreSelected();
+  },
+
+  mounted() {
     this.fetchReport();
   },
 };
