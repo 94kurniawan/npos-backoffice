@@ -131,7 +131,7 @@
 
           <p class="px-4 pt-4">Sales Details :</p>
           <table class="w-full">
-            <thead class="sticky top-24 bg-white text-sm">
+            <thead class="sticky top-0 bg-white text-sm">
               <tr class="uppercase">
                 <th class="py-3 px-4 text-left">item</th>
                 <th class="py-3 px-4 text-left mobile:hidden">variant</th>
