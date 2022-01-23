@@ -8,6 +8,7 @@ import ValidationKey from '../views/ValidationKey.vue'
 import StoreItems from '@/views/store_items/StoreItems.vue'
 import EditItem from '@/views/store_items/EditItem.vue'
 import AddItem from '@/views/store_items/AddItem.vue'
+import Recipe from '@/views/store_items/Recipe.vue'
 import RawMaterials from '@/views/raw_materials/RawMaterials.vue'
 // Print
 import PrintSalesSummary from '@/views/reports/print/PrintSalesSummary.vue'
@@ -57,6 +58,11 @@ const routes = [
     path: '/add-item',
     name: 'AddItem',
     component: AddItem
+  },
+  {
+    path: '/recipe',
+    name: 'Recipe',
+    component: Recipe
   },
   {
     path: '/raw-materials',
