@@ -55,18 +55,37 @@
           <p class="py-2 mr-2 text-sm text-gray-500 uppercase">
             {{ variant.name }}
           </p>
-          <div class="col-span-2 py-1 px-3 bg-yellow-100 rounded">
+          <div
+            v-if="variant.recipes.length != 0"
+            class="col-span-2 py-1 px-3 bg-yellow-100 rounded"
+          >
             <div v-for="ingredient in variant.recipes" :key="ingredient.key">
               {{ ingredient.amount }} {{ ingredient.unit }} -
               {{ ingredient.name }}
             </div>
           </div>
+          <div
+            v-if="variant.recipes.length == 0"
+            class="col-span-2 py-1 px-3 rounded bg-red-100"
+          >
+            Belum ada recipe
+          </div>
         </div>
       </div>
-      <div v-if="item.have_variants == false" class="py-2 px-4 bg-yellow-100">
-        <div v-for="ingredient in item.recipes" :key="ingredient.key">
+      <div v-if="item.have_variants == false">
+        <div
+          class="py-2 px-4 mb-1 bg-yellow-100"
+          v-for="ingredient in item.recipes"
+          :key="ingredient.key"
+        >
           {{ ingredient.amount }} {{ ingredient.unit }} -
           {{ ingredient.name }}
+        </div>
+        <div
+          v-if="item.recipes.length == 0"
+          class="col-span-2 py-1 px-3 rounded bg-red-100"
+        >
+          Belum ada recipe
         </div>
       </div>
     </div>
@@ -104,7 +123,7 @@ export default {
     },
     goToEditRecipe() {
       localStorage.setItem("itemSelected", JSON.stringify(this.item));
-      this.$router.push("edit-item");
+      this.$router.push("edit-recipe");
     },
   },
 

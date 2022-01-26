@@ -9,6 +9,7 @@ import StoreItems from '@/views/store_items/StoreItems.vue'
 import EditItem from '@/views/store_items/EditItem.vue'
 import AddItem from '@/views/store_items/AddItem.vue'
 import Recipe from '@/views/store_items/Recipe.vue'
+import EditRecipe from '@/views/store_items/EditRecipe.vue'
 import RawMaterials from '@/views/raw_materials/RawMaterials.vue'
 // Print
 import PrintSalesSummary from '@/views/reports/print/PrintSalesSummary.vue'
@@ -63,6 +64,11 @@ const routes = [
     path: '/recipe',
     name: 'Recipe',
     component: Recipe
+  },
+  {
+    path: '/edit-recipe',
+    name: 'EditRecipe',
+    component: EditRecipe
   },
   {
     path: '/raw-materials',

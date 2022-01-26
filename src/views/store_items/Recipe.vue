@@ -211,7 +211,6 @@ export default {
           },
         });
         this.itemSelected = response.data.data;
-        console.log(this.itemSelected);
         let modal = document.getElementById("modal-show-recipe");
         modal.style.display = "block";
       } catch (error) {
