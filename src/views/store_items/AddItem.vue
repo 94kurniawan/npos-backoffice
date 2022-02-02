@@ -9,7 +9,11 @@
         </div>
         <div class="p-2 grid grid-flow-row grid-cols-1 md:grid-cols-2">
           <p class="py-2 text-sm text-gray-500">Store</p>
-          <select v-model="item.store_id" class="p-3 border rounded">
+          <select
+            @change="selectStore()"
+            v-model="item.store_id"
+            class="p-3 border rounded"
+          >
             <option
               v-for="store in user.info.stores"
               :key="store.key"
@@ -366,6 +370,10 @@ export default {
   methods: {
     reset() {
       this.optionsSelected = [];
+      this.item.options = [];
+      this.item.store_category_id = null;
+      this.item.variants = [];
+      this.item.sales_types = [];
     },
     currency(number) {
       return numberFormat.currency(number);
@@ -379,9 +387,11 @@ export default {
     goBack() {
       this.$router.go(-1);
     },
-    getItem() {
-      // this.item = JSON.parse(localStorage.getItem("itemSelected"));
-      // localStorage.removeItem("itemSelected");
+    selectStore() {
+      this.reset();
+      this.fetchCategories();
+      this.fetchOptions();
+      this.fetchSalesType();
     },
     async fetchCategories() {
       try {
@@ -389,7 +399,7 @@ export default {
         const response = await axios.get(apiHost + "/api/store/categories", {
           headers,
           params: {
-            store_id: localStorage.getItem("selectedStore"),
+            store_id: this.item.store_id,
           },
         });
         this.categories = response.data.data;
@@ -403,7 +413,7 @@ export default {
         const response = await axios.get(apiHost + "/api/store/options", {
           headers,
           params: {
-            store_id: localStorage.getItem("selectedStore"),
+            store_id: this.item.store_id,
           },
         });
         this.options = response.data.data;
@@ -417,7 +427,7 @@ export default {
         const response = await axios.get(apiHost + "/api/store/sales-types", {
           headers,
           params: {
-            store_id: localStorage.getItem("selectedStore"),
+            store_id: this.item.store_id,
           },
         });
         this.salesType = response.data.data;
@@ -491,7 +501,6 @@ export default {
   },
 
   mounted() {
-    this.getItem();
     this.fetchCategories();
     this.fetchOptions();
     this.fetchSalesType();
