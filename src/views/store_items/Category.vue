@@ -236,7 +236,8 @@ export default {
             // },
           }
         );
-        console.log(response);
+        this.fetchCategories();
+        alert("berhasil mengubah category");
       } catch (error) {
         console.log(error.response);
       }

@@ -36,10 +36,10 @@
         </div>
         <div class="px-4">
           <button
-            @click="goToEdit()"
+            @click="saveEdit()"
             class="bg-modern-green text-white py-3 px-6 rounded-md"
           >
-            Edit
+            Save
           </button>
         </div>
       </div>
@@ -72,8 +72,9 @@ export default {
         modal.style.display = "none";
       }
     },
-    goToEdit() {
+    saveEdit() {
       this.$emit("editCategory");
+      this.closeModal();
     },
   },
 
