@@ -7,7 +7,7 @@
         </div>
         <div class="py-3">
           <!-- <button
-            @click="addNewItem()"
+            @click="showModalAddCategory()"
             class="
               bg-modern-green
               text-white
@@ -137,6 +137,9 @@
       </div>
     </div>
 
+    <!-- add new category -->
+    <modal-add-category @addCategory="addCategory" />
+
     <!-- edit category -->
     <modal-show-category
       :category="categorySelected"
@@ -152,6 +155,7 @@ import * as numberFormat from "@/custom_package/number.js";
 import SideMenu from "@/views/components/SideMenu.vue";
 import axios from "axios";
 import ModalShowCategory from "@/views/components/ModalShowCategory.vue";
+import ModalAddCategory from "@/views/components/ModalAddCategory.vue";
 let apiHost = process.env.VUE_APP_BACKEND_HOST;
 
 export default {
@@ -159,6 +163,7 @@ export default {
   components: {
     SideMenu,
     ModalShowCategory,
+    ModalAddCategory,
   },
 
   data() {
@@ -214,6 +219,28 @@ export default {
           },
         });
         this.categories = response.data.data;
+      } catch (error) {
+        console.log(error.response);
+      }
+    },
+    showModalAddCategory() {
+      let modal = document.getElementById("modal-add-category");
+      modal.style.display = "block";
+    },
+    async addCategory(category) {
+      try {
+        let data = { name: category };
+        let headers = { Authorization: `Bearer ${this.user.token}` };
+        const response = await axios.post(
+          apiHost + "/api/store/categories",
+          data,
+          {
+            headers,
+          }
+        );
+        console.log(response);
+        this.fetchCategories();
+        alert("berhasil menambah category");
       } catch (error) {
         console.log(error.response);
       }
