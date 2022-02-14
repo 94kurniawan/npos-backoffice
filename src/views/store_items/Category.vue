@@ -6,7 +6,7 @@
           <p class="text-center uppercase p-3 md:mb-3 font-bold">Category</p>
         </div>
         <div class="py-3">
-          <!-- <button
+          <button
             @click="showModalAddCategory()"
             class="
               bg-modern-green
@@ -33,7 +33,7 @@
               />
             </svg>
             Tambah Category Baru
-          </button> -->
+          </button>
           <table class="w-full">
             <thead class="sticky top-12 bg-white text-sm">
               <tr class="uppercase">
@@ -236,6 +236,9 @@ export default {
           data,
           {
             headers,
+            params: {
+              store_id: localStorage.getItem("selectedStore"),
+            },
           }
         );
         console.log(response);
