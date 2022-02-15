@@ -291,7 +291,7 @@
           <p class="ml-1">Category</p>
         </router-link>
       </div>
-      <router-link to="/raw-materials" class="py-4 flex items-center">
+      <div @click="showRawMaterialsMenu()" class="py-4 flex items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-6 w-6"
@@ -303,11 +303,73 @@
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
-            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
           />
         </svg>
-        <p class="ml-1">Bahan Baku</p>
-      </router-link>
+        <p class="ml-1 flex-grow">Ingredients</p>
+        <svg
+          v-if="showAllRawMaterialsMenu === false"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        <svg
+          v-if="showAllRawMaterialsMenu === true"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </div>
+      <div v-if="showAllRawMaterialsMenu === true">
+        <router-link to="/raw-materials" class="py-4 pl-4 flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+            />
+          </svg>
+          <p class="ml-1">Store Ingredients</p>
+        </router-link>
+        <router-link to="/stock-adjustment" class="py-4 pl-4 flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+            />
+          </svg>
+          <p class="ml-1">Stock Adjustment</p>
+        </router-link>
+      </div>
     </div>
 
     <!-- logout -->
@@ -387,6 +449,7 @@ export default {
       },
       showAllReports: true,
       showAllItemsMenu: true,
+      showAllRawMaterialsMenu: true,
 
       selectedStore: null,
     };
@@ -410,6 +473,13 @@ export default {
         this.showAllItemsMenu = true;
       } else {
         this.showAllItemsMenu = false;
+      }
+    },
+    showRawMaterialsMenu() {
+      if (this.showAllRawMaterialsMenu === false) {
+        this.showAllRawMaterialsMenu = true;
+      } else {
+        this.showAllRawMaterialsMenu = false;
       }
     },
 

@@ -3,7 +3,9 @@
     <div class="relative h-full w-full p-3">
       <div class="bg-white h-full overflow-y-auto pb-20">
         <div class="sticky top-0 bg-gray-700 text-white">
-          <p class="text-center uppercase p-3 md:mb-3 font-bold">Bahan Baku</p>
+          <p class="text-center uppercase p-3 md:mb-3 font-bold">
+            Store Ingredients
+          </p>
         </div>
         <div class="py-3">
           <table class="w-full">

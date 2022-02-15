@@ -470,7 +470,7 @@ export default {
   },
 
   created() {
-    this.fillStoreSelected();
+    // this.fillStoreSelected();
   },
 
   mounted() {
