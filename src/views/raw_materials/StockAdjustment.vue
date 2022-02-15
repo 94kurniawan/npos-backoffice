@@ -72,33 +72,35 @@
         </div>
         <div class="py-3 w-full">
           <div class="flex justify-end">
-            <button
-              class="
-                bg-modern-green
-                text-white
-                py-2
-                px-3
-                rounded
-                flex
-                items-center
-              "
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 mr-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+            <router-link to="/create-adjustment">
+              <button
+                class="
+                  bg-modern-green
+                  text-white
+                  py-2
+                  px-3
+                  rounded
+                  flex
+                  items-center
+                "
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                />
-              </svg>
-              Buat Penyesuaian Baru
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6 mr-1"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  />
+                </svg>
+                Buat Penyesuaian Baru
+              </button>
+            </router-link>
           </div>
           <table class="w-full">
             <thead class="sticky top-28 bg-white text-sm">

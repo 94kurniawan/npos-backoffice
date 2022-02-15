@@ -13,6 +13,7 @@ import Category from '@/views/store_items/Category.vue'
 import EditRecipe from '@/views/store_items/EditRecipe.vue'
 import RawMaterials from '@/views/raw_materials/RawMaterials.vue'
 import StockAdjustment from '@/views/raw_materials/StockAdjustment.vue'
+import CreateAdjustment from '@/views/raw_materials/CreateAdjustment.vue'
 // Print
 import PrintSalesSummary from '@/views/reports/print/PrintSalesSummary.vue'
 
@@ -86,6 +87,11 @@ const routes = [
     path: '/stock-adjustment',
     name: 'StockAdjustment',
     component: StockAdjustment
+  },
+  {
+    path: '/create-adjustment',
+    name: 'CreateAdjustment',
+    component: CreateAdjustment
   },
   // Print
   {
