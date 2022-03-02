@@ -4,6 +4,7 @@ import Login from '../views/Login.vue'
 import SalesSummary from '../views/reports/SalesSummary.vue'
 import RecapCashier from '../views/reports/RecapCashier.vue'
 import StockHistory from '@/views/reports/StockHistory.vue'
+import TransactionsHistory from '@/views/reports/TransactionsHistory.vue'
 import ValidationKey from '../views/ValidationKey.vue'
 import StoreItems from '@/views/store_items/StoreItems.vue'
 import EditItem from '@/views/store_items/EditItem.vue'
@@ -42,6 +43,11 @@ const routes = [
     path: '/stock-history',
     name: 'StockHistory',
     component: StockHistory
+  },
+  {
+    path: '/transactions-history',
+    name: 'TransactionsHistory',
+    component: TransactionsHistory
   },
   {
     path: '/validation-key',
