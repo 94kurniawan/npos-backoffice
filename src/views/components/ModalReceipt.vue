@@ -44,12 +44,17 @@
             {{ formatDateInIDN(receipt.order_date) }}
           </p>
         </div> -->
-        <div class="flex gap-2">
-          <p>Tanggal</p>
-          <p class="text-right flex-grow">
-            {{ formatDateInIDN(receipt.order_date) }}
+        <div class="flex justify-center">
+          <p class="text-right">
+            {{ formatDateInIDN(receipt.order_date) }} -
+            {{ receipt.payment.time }}
           </p>
         </div>
+
+        <p
+          class="text-center pb-0.5 border-b-2 border-dashed border-gray-500"
+        ></p>
+
         <div class="flex gap-2">
           <p>Nomor</p>
           <p class="text-right flex-grow">{{ receipt.payment.number }}</p>
@@ -211,7 +216,7 @@ export default {
     },
     formatDateInIDN(date) {
       // return moment(date).format("LL");
-      return moment(date).format("DD MMM YYYY, h:mm:ss a");
+      return moment(date).format("DD MMM YYYY, LTS");
     },
     closeModal() {
       let modal = document.getElementById("modal-receipt");
