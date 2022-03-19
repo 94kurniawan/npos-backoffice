@@ -4,7 +4,7 @@
   <div class="bg-white">
     <div class="bg-white">
       <p class="text-center uppercase pt-3 md:mb-3 font-bold">
-        AYAM KRIUK PADASUKA - ({{ storeSelected.name }})
+        ({{ storeSelected.name }})
       </p>
       <hr />
       <p class="text-center uppercase p-3 md:mb-3 font-bold">
