@@ -121,6 +121,10 @@ export default {
         "selectedStore",
         response.data.data.info.stores[0].id
       );
+      localStorage.setItem(
+        "selectedStoreDetails",
+        JSON.stringify(response.data.data.info.stores[0])
+      );
       this.$router.push("/sales-summary");
     },
 

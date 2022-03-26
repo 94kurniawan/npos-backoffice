@@ -35,13 +35,13 @@
         <div class="font-bold">
           <select
             @change="selectStore()"
-            v-model="selectedStore"
+            v-model="selectedStoreDetails"
             class="w-full border-2 p-2 rounded-lg bg-gray-200"
           >
             <option
               v-for="store in userInfo.info.stores"
               :key="store.key"
-              :value="store.id"
+              :value="store"
             >
               {{ store.name }}
             </option>
@@ -472,12 +472,16 @@ export default {
       showAllRawMaterialsMenu: true,
 
       selectedStore: null,
+      selectedStoreDetails: {},
     };
   },
 
   created() {
     this.userInfo = JSON.parse(localStorage.getItem("user"));
     this.selectedStore = localStorage.getItem("selectedStore");
+    this.selectedStoreDetails = JSON.parse(
+      localStorage.getItem("selectedStoreDetails")
+    );
   },
 
   methods: {
@@ -504,7 +508,11 @@ export default {
     },
 
     selectStore() {
-      localStorage.setItem("selectedStore", this.selectedStore);
+      localStorage.setItem("selectedStore", this.selectedStoreDetails.id);
+      localStorage.setItem(
+        "selectedStoreDetails",
+        JSON.stringify(this.selectedStoreDetails)
+      );
       this.$router.go();
     },
 

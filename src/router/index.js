@@ -17,6 +17,7 @@ import StockAdjustment from '@/views/raw_materials/StockAdjustment.vue'
 import CreateAdjustment from '@/views/raw_materials/CreateAdjustment.vue'
 // Print
 import PrintSalesSummary from '@/views/reports/print/PrintSalesSummary.vue'
+import PrintRawMaterials from '@/views/raw_materials/print/PrintRawMaterials.vue'
 
 const routes = [
   {
@@ -104,6 +105,11 @@ const routes = [
     path: '/print-sales-summary',
     name: 'PrintSalesSummary',
     component: PrintSalesSummary
+  },
+  {
+    path: '/print-raw-materials',
+    name: 'PrintRawMaterials',
+    component: PrintRawMaterials
   },
   // {
   //   path: '/about',

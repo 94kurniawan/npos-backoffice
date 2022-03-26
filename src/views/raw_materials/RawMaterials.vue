@@ -41,6 +41,39 @@
       </div>
     </div>
 
+    <!-- print button -->
+    <button
+      @click="print()"
+      type="submit"
+      class="
+        absolute
+        flex
+        bg-blue-400
+        text-white
+        p-3
+        rounded
+        items-center
+        bottom-6
+        left-4
+      "
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+        />
+      </svg>
+      <p class="px-1">Print</p>
+    </button>
+
     <!-- side menu -->
     <button
       @click="showMenu()"
@@ -98,9 +131,6 @@
         </div>
       </div>
     </div>
-
-    <!-- show item -->
-    <!-- <modal-show-item :item="itemSelected" /> -->
   </div>
 </template>
 
@@ -125,12 +155,12 @@ export default {
       user: JSON.parse(localStorage.getItem("user")),
       rawMaterials: [
         {
-          id: 70,
-          warehouse_item_id: 70,
-          sku: "P-22",
-          name: "ACAR",
-          stock: -1,
-          unit: "pcs",
+          id: null,
+          warehouse_item_id: null,
+          sku: "",
+          name: "",
+          stock: null,
+          unit: "",
         },
       ],
       // Temporary Data
@@ -175,14 +205,15 @@ export default {
         console.log(error.response);
       }
     },
-    // showItem(item) {
-    //   this.itemSelected = item;
-    //   let modal = document.getElementById("modal-show-item");
-    //   modal.style.display = "block";
-    // },
-    // addNewItem() {
-    //   this.$router.push("add-item");
-    // },
+    print() {
+      // localStorage.setItem("storeSelected", JSON.stringify(this.storeSelected));
+      localStorage.setItem("rawMaterials", JSON.stringify(this.rawMaterials));
+      let router = this.$router.resolve({
+        name: "PrintRawMaterials",
+      });
+
+      window.open(router.href, "", "width=1000,height=650");
+    },
   },
 
   created() {
