@@ -9,8 +9,7 @@
           <div
             class="
               grid
-              items-center
-              content-center
+              items-start
               justify-items-center
               grid-cols-2
               md:grid-cols-8
@@ -46,28 +45,37 @@
                 rounded-lg
               "
             />
-            <select
-              @change="fetchReport()"
-              v-model="storeSelected"
-              class="
-                col-span-2
-                w-full
-                bg-white
-                px-3
-                py-3.5
-                border-2
-                outline-none
-                rounded-lg
-              "
-            >
-              <option
-                v-for="store in user.info.stores"
-                :key="store.key"
-                :value="store"
+            <div class="col-span-2 w-full text-right">
+              <select
+                @change="fetchReport()"
+                v-model="storeSelected"
+                class="
+                  w-full
+                  bg-white
+                  px-3
+                  py-3.5
+                  border-2
+                  outline-none
+                  rounded-lg
+                "
               >
-                {{ store.name }}
-              </option>
-            </select>
+                <option
+                  v-for="store in user.info.stores"
+                  :key="store.key"
+                  :value="store"
+                >
+                  {{ store.name }}
+                </option>
+              </select>
+              <!-- <input
+                @click="groupByCategoryChecked()"
+                type="checkbox"
+                id="checkbox1"
+                value="1"
+                class="checked:bg-red-600 checked:border-red-500"
+              />
+              <label for="checkbox1"> Group by Category</label> -->
+            </div>
           </div>
         </div>
         <div class="py-3">
@@ -364,46 +372,35 @@ export default {
       },
 
       report: {
-        total_gross_sales: 99000,
+        total_gross_sales: null,
         discounts: [
           {
-            discount_name: "50%",
-            discount_percentage: 0.5,
-            amount: 45000,
+            discount_name: "",
+            discount_percentage: null,
+            amount: null,
           },
         ],
-        net_sales: 54000,
+        net_sales: null,
         additional_costs: [
           {
-            add_cost_name: "PPN 5%",
-            percentage: 0.05,
-            amount: 2250,
+            add_cost_name: "",
+            percentage: null,
+            amount: null,
           },
         ],
-        total_collect: 56250,
+        total_collect: null,
         items: [
-          {
-            store_item_name: "Paket Kampung",
-            store_item_id: 1,
-            variant: "Dada",
-            sold: "3",
-            gross_sales: "90000",
-            total_discount: 15000,
-            net_sale: 45000,
-            additional_cost: 2250,
-            total_collected: 47250,
-          },
-          {
-            store_item_name: "Air Mineral",
-            store_item_id: 3,
-            variant: null,
-            sold: "3",
-            gross_sales: "9000",
-            total_discount: 0,
-            net_sale: 9000,
-            additional_cost: null,
-            total_collected: null,
-          },
+          // {
+          //   store_item_name: "",
+          //   store_item_id: null,
+          //   variant: null,
+          //   sold: "",
+          //   gross_sales: "",
+          //   total_discount: null,
+          //   net_sale: null,
+          //   additional_cost: null,
+          //   total_collected: null,
+          // },
         ],
       },
 
@@ -457,6 +454,11 @@ export default {
         console.log(error.response);
       }
     },
+
+    groupByCategoryChecked() {
+      let checked = document.querySelector("#checkbox1").checked;
+      console.log(checked);
+    },
     print() {
       localStorage.setItem("datePeriod", JSON.stringify(this.datePeriod));
       localStorage.setItem("storeSelected", JSON.stringify(this.storeSelected));
@@ -474,7 +476,7 @@ export default {
   },
 
   mounted() {
-    this.fetchReport();
+    // this.fetchReport();
   },
 };
 </script>
