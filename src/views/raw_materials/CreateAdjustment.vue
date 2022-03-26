@@ -40,8 +40,15 @@
         <div class="py-2">
           <table class="w-full">
             <thead class="sticky top-28 bg-white text-sm">
-              <tr class="uppercase">
-                <th class="py-3 px-4 text-left">Bahanbaku</th>
+              <tr class="">
+                <th class="py-3 px-4 text-left">
+                  BAHANBAKU
+                  <a
+                    @click="showConfirmResetAllStock()"
+                    class="text-red-500 underline"
+                    >Reset Semua Stok</a
+                  >
+                </th>
                 <th class="py-3 px-4 text-right">Stok Saat Ini</th>
               </tr>
             </thead>
@@ -164,7 +171,7 @@
 
     <!-- Save Button -->
     <button
-      @click="save()"
+      @click="cleanAdjustmentData()"
       type="submit"
       class="
         absolute
@@ -197,6 +204,9 @@
       </svg>
       SAVE
     </button>
+
+    <!-- modal confirm -->
+    <modal-confirm :message="message" @yes="resetAllStock" />
   </div>
 </template>
 
@@ -204,11 +214,15 @@
 import moment from "moment";
 import "moment/locale/id";
 import * as numberFormat from "@/custom_package/number.js";
+import ModalConfirm from "@/views/components/ModalConfirm.vue";
 import axios from "axios";
 let apiHost = process.env.VUE_APP_BACKEND_HOST;
 
 export default {
   name: "CreateAdjustment",
+  components: {
+    ModalConfirm,
+  },
 
   data() {
     return {
@@ -237,6 +251,8 @@ export default {
           },
         ],
       },
+
+      message: "",
     };
   },
 
@@ -294,15 +310,15 @@ export default {
         data.id = data.ingredient.id;
         delete data.ingredient;
       });
-      return data;
+      this.save(data);
     },
 
-    async save() {
+    async save(dataAdjustment) {
       try {
         let headers = { Authorization: `Bearer ${this.user.token}` };
         await axios.post(
           apiHost + "/api/store/adjustments/ingredients",
-          this.cleanAdjustmentData(),
+          dataAdjustment,
           {
             headers,
           }
@@ -312,6 +328,26 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+
+    showConfirmResetAllStock() {
+      this.message =
+        "Pastikan Sudah Memilih Store yang sesuai. Jika dilanjutkan maka Stok Semua Bahanbaku akan berubah menjadi 0 (nol)";
+      let modal = document.getElementById("modal-confirm");
+      modal.style.display = "block";
+    },
+
+    resetAllStock() {
+      let data = JSON.parse(JSON.stringify(this.adjustment));
+      data.note = "Reset All Stock (" + data.note + ")";
+      data.ingredients = [];
+      this.rawMaterials.forEach((rawMaterial) => {
+        data.ingredients.push({
+          id: rawMaterial.id,
+          quantity: 0,
+        });
+      });
+      this.save(data);
     },
   },
 };
