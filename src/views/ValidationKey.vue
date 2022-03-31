@@ -150,7 +150,7 @@
       <div
         id="sideMenuSalesHistory"
         @click="closeMenuWindow()"
-        class="h-full bg-gray-500 bg-opacity-40 grid grid-cols-12"
+        class="h-full backdrop-filter backdrop-blur-sm grid grid-cols-12"
       >
         <div
           class="

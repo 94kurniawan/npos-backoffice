@@ -15,6 +15,7 @@ import EditRecipe from '@/views/store_items/EditRecipe.vue'
 import RawMaterials from '@/views/raw_materials/RawMaterials.vue'
 import StockAdjustment from '@/views/raw_materials/StockAdjustment.vue'
 import CreateAdjustment from '@/views/raw_materials/CreateAdjustment.vue'
+import Discount from '@/views/Discount.vue'
 // Print
 import PrintSalesSummary from '@/views/reports/print/PrintSalesSummary.vue'
 import PrintRawMaterials from '@/views/raw_materials/print/PrintRawMaterials.vue'
@@ -99,6 +100,11 @@ const routes = [
     path: '/create-adjustment',
     name: 'CreateAdjustment',
     component: CreateAdjustment
+  },
+  {
+    path: '/discount',
+    name: 'Discount',
+    component: Discount
   },
   // Print
   {

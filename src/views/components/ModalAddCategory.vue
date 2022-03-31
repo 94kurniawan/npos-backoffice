@@ -5,7 +5,7 @@
       hidden
       fixed
       inset-0
-      bg-gray-600 bg-opacity-50
+      backdrop-filter backdrop-blur-md
       overflow-y-auto
       h-full
       w-full
