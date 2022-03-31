@@ -112,8 +112,8 @@
       </div>
 
       <p class="px-4 pt-4">Sales Details :</p>
-      <table class="w-full">
-        <thead class="sticky top-24 bg-white text-sm">
+      <table v-if="reportByCategory == 'false'" class="w-full">
+        <thead class="sticky top-0 bg-white text-sm">
           <tr class="uppercase">
             <th class="py-3 px-4 text-left">item</th>
             <th class="py-3 px-4 text-left mobile:hidden">variant</th>
@@ -129,7 +129,6 @@
           <tr
             v-for="item in report.items"
             :key="item.key"
-            @click="showReceipt(history)"
             class="
               border-b border-gray-200
               hover:bg-gray-100
@@ -145,6 +144,73 @@
               {{ item.variant }}
             </td>
             <td class="py-3 px-4 text-right">{{ separator(item.sold) }}</td>
+            <td class="py-3 px-4 text-right mobile:hidden">
+              {{ separator(item.gross_sales) }}
+            </td>
+            <td class="py-3 px-4 text-right mobile:hidden">
+              {{ separator(item.total_discount) }}
+            </td>
+            <td class="py-3 px-4 text-right mobile:hidden">
+              {{ separator(item.net_sale) }}
+            </td>
+            <td class="py-3 px-4 text-right mobile:hidden">
+              {{ separator(item.additional_cost) }}
+            </td>
+            <td class="py-3 px-4 text-right">
+              {{ separator(item.total_collected) }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table v-if="reportByCategory == 'true'" class="w-full">
+        <thead class="sticky top-0 bg-white text-sm">
+          <tr class="uppercase">
+            <th class="py-3 px-4 text-left">item</th>
+            <th class="py-3 px-4 text-left mobile:hidden">variant</th>
+            <th class="py-3 px-4 text-right">sold</th>
+            <th class="py-3 px-4 text-right mobile:hidden">gross sales</th>
+            <th class="py-3 px-4 text-right mobile:hidden">discount</th>
+            <th class="py-3 px-4 text-right mobile:hidden">net sale</th>
+            <th class="py-3 px-4 text-right mobile:hidden">add cost</th>
+            <th class="py-3 px-4 text-right">collected</th>
+          </tr>
+        </thead>
+        <tbody
+          v-for="category in report.categories"
+          :key="category.key"
+          class="text-gray-800 text-sm font-light"
+        >
+          <tr
+            v-if="category.items.length != 0"
+            class="border-b bg-blue-100 border-gray-200 align-top"
+          >
+            <td colspan="8" class="py-1 px-4 text-left">
+              <p class="font-bold text-left">
+                <i class="mobile:hidden">Category: </i>{{ category.name }}
+              </p>
+            </td>
+          </tr>
+          <tr
+            v-for="item in category.items"
+            :key="item.key"
+            class="
+              border-b border-gray-200
+              hover:bg-gray-100
+              odd:bg-gray-50
+              align-top
+            "
+          >
+            <td class="py-3 px-4 text-left">
+              {{ item.store_item_name }}
+              <p class="sm:hidden text-gray-500">{{ item.variant }}</p>
+            </td>
+            <td class="py-3 px-4 text-left mobile:hidden">
+              {{ item.variant }}
+            </td>
+            <td class="py-3 px-4 text-right">
+              {{ separator(item.sold) }}
+            </td>
             <td class="py-3 px-4 text-right mobile:hidden">
               {{ separator(item.gross_sales) }}
             </td>
@@ -240,6 +306,7 @@ export default {
       datePeriod: {},
       storeSelected: {},
       report: {},
+      reportByCategory: null,
     };
   },
 
@@ -257,6 +324,7 @@ export default {
       this.datePeriod = JSON.parse(localStorage.getItem("datePeriod"));
       this.storeSelected = JSON.parse(localStorage.getItem("storeSelected"));
       this.report = JSON.parse(localStorage.getItem("salesSummary"));
+      this.reportByCategory = localStorage.getItem("reportByCategory");
       this.print();
     },
     print() {
@@ -267,6 +335,7 @@ export default {
       localStorage.removeItem("salesSummary");
       localStorage.removeItem("storeSelected");
       localStorage.removeItem("datePeriod");
+      localStorage.removeItem("reportByCategory");
     },
   },
 

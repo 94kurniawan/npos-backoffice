@@ -18,7 +18,6 @@
           >
             <label class="mobile:hidden col-start-2 px-2">Period</label>
             <input
-              @change="fetchReport()"
               v-model="datePeriod.from"
               type="date"
               class="
@@ -32,7 +31,6 @@
               "
             />
             <input
-              @change="fetchReport()"
               v-model="datePeriod.to"
               type="date"
               class="
@@ -47,7 +45,6 @@
             />
             <div class="col-span-2 w-full text-right">
               <select
-                @change="fetchReport()"
                 v-model="storeSelected"
                 class="
                   w-full
@@ -67,14 +64,15 @@
                   {{ store.name }}
                 </option>
               </select>
-              <!-- <input
+              <input
                 @click="groupByCategoryChecked()"
+                checked
                 type="checkbox"
                 id="checkbox1"
                 value="1"
                 class="checked:bg-red-600 checked:border-red-500"
               />
-              <label for="checkbox1"> Group by Category</label> -->
+              <label for="checkbox1"> Group by Category</label>
             </div>
           </div>
         </div>
@@ -138,7 +136,7 @@
           </div>
 
           <p class="px-4 pt-4">Sales Details :</p>
-          <table class="w-full">
+          <table v-if="reportByCategory == false" class="w-full">
             <thead class="sticky top-0 bg-white text-sm">
               <tr class="uppercase">
                 <th class="py-3 px-4 text-left">item</th>
@@ -171,6 +169,74 @@
                   {{ item.variant }}
                 </td>
                 <td class="py-3 px-4 text-right">{{ separator(item.sold) }}</td>
+                <td class="py-3 px-4 text-right mobile:hidden">
+                  {{ separator(item.gross_sales) }}
+                </td>
+                <td class="py-3 px-4 text-right mobile:hidden">
+                  {{ separator(item.total_discount) }}
+                </td>
+                <td class="py-3 px-4 text-right mobile:hidden">
+                  {{ separator(item.net_sale) }}
+                </td>
+                <td class="py-3 px-4 text-right mobile:hidden">
+                  {{ separator(item.additional_cost) }}
+                </td>
+                <td class="py-3 px-4 text-right">
+                  {{ separator(item.total_collected) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table v-if="reportByCategory == true" class="w-full">
+            <thead class="sticky top-0 bg-white text-sm">
+              <tr class="uppercase">
+                <th class="py-3 px-4 text-left">item</th>
+                <th class="py-3 px-4 text-left mobile:hidden">variant</th>
+                <th class="py-3 px-4 text-right">sold</th>
+                <th class="py-3 px-4 text-right mobile:hidden">gross sales</th>
+                <th class="py-3 px-4 text-right mobile:hidden">discount</th>
+                <th class="py-3 px-4 text-right mobile:hidden">net sale</th>
+                <th class="py-3 px-4 text-right mobile:hidden">add cost</th>
+                <th class="py-3 px-4 text-right">collected</th>
+              </tr>
+            </thead>
+            <tbody
+              v-for="category in report.categories"
+              :key="category.key"
+              class="text-gray-800 text-sm font-light"
+            >
+              <tr
+                v-if="category.items.length != 0"
+                class="border-b bg-blue-100 border-gray-200 align-top"
+              >
+                <td colspan="8" class="py-1 px-4 text-left">
+                  <p class="font-bold text-left">
+                    <i class="mobile:hidden">Category: </i>{{ category.name }}
+                  </p>
+                </td>
+              </tr>
+              <tr
+                v-for="item in category.items"
+                :key="item.key"
+                @click="showReceipt(history)"
+                class="
+                  border-b border-gray-200
+                  hover:bg-gray-100
+                  odd:bg-gray-50
+                  align-top
+                "
+              >
+                <td class="py-3 px-4 text-left">
+                  {{ item.store_item_name }}
+                  <p class="sm:hidden text-gray-500">{{ item.variant }}</p>
+                </td>
+                <td class="py-3 px-4 text-left mobile:hidden">
+                  {{ item.variant }}
+                </td>
+                <td class="py-3 px-4 text-right">
+                  {{ separator(item.sold) }}
+                </td>
                 <td class="py-3 px-4 text-right mobile:hidden">
                   {{ separator(item.gross_sales) }}
                 </td>
@@ -366,10 +432,7 @@ export default {
         from: moment().format("YYYY-MM-DD"),
         to: moment().format("YYYY-MM-DD"),
       },
-      storeSelected: {
-        id: null,
-        name: "",
-      },
+      storeSelected: JSON.parse(localStorage.getItem("selectedStoreDetails")),
 
       report: {
         total_gross_sales: null,
@@ -404,8 +467,29 @@ export default {
         ],
       },
 
+      reportByCategory: true,
+
       showSideMenu: true,
     };
+  },
+
+  watch: {
+    reportByCategory() {
+      this.fetchReport();
+    },
+
+    datePeriod: {
+      handler: function () {
+        this.fetchReport();
+      },
+      deep: true,
+    },
+    storeSelected: {
+      handler: function () {
+        this.fetchReport();
+      },
+      deep: true,
+    },
   },
 
   methods: {
@@ -436,19 +520,22 @@ export default {
       this.storeSelected = this.user.info.stores[0];
     },
     async fetchReport() {
+      let link = "";
+      if (this.reportByCategory == true) {
+        link = "/api/store/fetch-sales-reports-by-category";
+      } else {
+        link = "/api/store/fetch-sales-reports";
+      }
       try {
         let headers = { Authorization: `Bearer ${this.user.token}` };
-        const response = await axios.get(
-          apiHost + "/api/store/fetch-sales-reports",
-          {
-            headers,
-            params: {
-              date_from: this.datePeriod.from,
-              date_to: this.datePeriod.to,
-              store_id: this.storeSelected.id,
-            },
-          }
-        );
+        const response = await axios.get(apiHost + link, {
+          headers,
+          params: {
+            date_from: this.datePeriod.from,
+            date_to: this.datePeriod.to,
+            store_id: this.storeSelected.id,
+          },
+        });
         this.report = response.data.data;
       } catch (error) {
         console.log(error.response);
@@ -456,13 +543,14 @@ export default {
     },
 
     groupByCategoryChecked() {
-      let checked = document.querySelector("#checkbox1").checked;
-      console.log(checked);
+      let check = document.querySelector("#checkbox1").checked; // true or false
+      this.reportByCategory = check;
     },
     print() {
       localStorage.setItem("datePeriod", JSON.stringify(this.datePeriod));
       localStorage.setItem("storeSelected", JSON.stringify(this.storeSelected));
       localStorage.setItem("salesSummary", JSON.stringify(this.report));
+      localStorage.setItem("reportByCategory", this.reportByCategory);
       let router = this.$router.resolve({
         name: "PrintSalesSummary",
       });
@@ -471,12 +559,8 @@ export default {
     },
   },
 
-  created() {
-    // this.fillStoreSelected();
-  },
-
   mounted() {
-    // this.fetchReport();
+    this.fetchReport();
   },
 };
 </script>

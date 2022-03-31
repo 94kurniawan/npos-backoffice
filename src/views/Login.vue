@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen w-screen p-6 bg-gray-100 overflow-y-auto">
+  <div class="h-screen w-screen p-6 bg-modern-green overflow-y-auto">
     <div
       class="
         p-6
@@ -9,14 +9,31 @@
         lg:w-1/3
         bg-white
         shadow-lg
-        rounded-t-xl
+        rounded-xl
       "
     >
       <!-- <div class="relative px-6">
         <img src="@/assets/img/NullReborn.png" class="mx-auto h-60" />
         <div class="absolute bottom-0 left-0 p-3 w-full bg-gray-100"></div>
       </div> -->
-      <p class="text-center p-5 tracking-widest text-xl">WELCOME BACK</p>
+      <p class="text-center p-t font-bold">N-POS</p>
+      <p class="text-center p-t font-bold text-green-800 uppercase">
+        "back office"
+      </p>
+      <p class="text-center pb-2 text-xs">powered by &copy; NULL REBORN</p>
+      <!-- <p class="text-center pt-5 tracking-widest text-xl uppercase">n-pos</p>
+      <p
+        class="
+          text-center
+          pb-5
+          tracking-widest
+          text-xl
+          uppercase
+          text-green-800
+        "
+      >
+        "back office"
+      </p> -->
       <div class="flex items-center content-center mt-0 px-6">
         <div class="absolute text-gray-600">
           <svg
@@ -40,7 +57,7 @@
           type="email"
           name=""
           class="w-full bg-white py-4 pl-8 outline-none rounded-t-md border-b-2"
-          placeholder="Email"
+          placeholder="Email / Username"
         />
       </div>
       <div class="flex items-center content-center mt-1 px-6">
