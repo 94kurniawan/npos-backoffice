@@ -20,7 +20,7 @@
       <p class="text-center p-t font-bold text-green-800 uppercase">
         "back office"
       </p>
-      <p class="text-center pb-2 text-xs">powered by &copy; NULL REBORN</p>
+      <p class="text-center pb-2 text-xs">powered by &copy; Budi Kurniawan</p>
       <!-- <p class="text-center pt-5 tracking-widest text-xl uppercase">n-pos</p>
       <p
         class="
